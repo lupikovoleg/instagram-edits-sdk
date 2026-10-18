@@ -69,6 +69,54 @@ class QueryResult:
         _wire.private_write(path, json.dumps(self.payload, ensure_ascii=False, indent=2, allow_nan=False))
         return path
 
+    def get_data(self, *fields: str):
+        """Read a path using logical names, resolving observed canonical aliases."""
+        value = self.payload.get("data")
+        for name in fields:
+            if not isinstance(value, dict):
+                raise _wire.RetentionError(f"Expected object while resolving {name}.")
+            if name in value:
+                value = value[name]
+                continue
+            pattern = r"(?:[0-9]+(?:\$|f))?" + _wire.re.escape(name) + r"(?:\(.*\))?"
+            keys = [key for key in value if _wire.re.fullmatch(pattern, key)]
+            logical_keys = {_wire.re.sub(r"^[0-9]+(?:\$|f)", "", key) for key in keys}
+            if len(logical_keys) > 1:
+                raise _wire.RetentionError(f"Ambiguous response arguments for field: {name}")
+            matches = [value[key] for key in keys]
+            non_null = [item for item in matches if item is not None]
+            if len(non_null) == 1:
+                value = non_null[0]
+            elif non_null:
+                value = non_null[0]
+                for fragment in non_null[1:]:
+                    value = _merge_alias_fragments(value, fragment)
+            elif matches and not non_null:
+                value = None
+            else:
+                raise _wire.RetentionError(f"Missing or ambiguous response field: {name}")
+        return value
+
+
+def _merge_alias_fragments(left, right):
+    """Combine disjoint fields of the same argument-qualified NDJSON node."""
+    if left == right:
+        return left
+    if isinstance(left, dict) and isinstance(right, dict):
+        result = dict(left)
+        for key, item in right.items():
+            result[key] = _merge_alias_fragments(result[key], item) if key in result else item
+        return result
+    raise _wire.RetentionError("Conflicting response fragments for the same logical field.")
+
+
+@dataclass(frozen=True)
+class ReelsPage:
+    items: tuple[dict[str, Any], ...] = field(repr=False)
+    has_next_page: bool
+    next_cursor: str | None = field(repr=False)
+    response: QueryResult = field(repr=False)
+
 
 @dataclass(frozen=True)
 class RetentionPoint:
@@ -88,8 +136,12 @@ class ReelInsights:
     metadata: dict[str, Any]
     response: QueryResult = field(repr=False)
 
+    @property
+    def retention_available(self) -> bool:
+        return self.metadata["retention_status"] == "available"
+
     def to_dict(self):
-        return {"media_id": self.media_id,
+        return {"media_id": self.media_id, "retention_available": self.retention_available,
                 "retention": [{**asdict(point), "percent": point.percent} for point in self.retention],
                 "metrics": self.metrics, "metadata": self.metadata}
 
@@ -107,12 +159,14 @@ class ReelInsights:
                     "fetched_at": self.response.fetched_at, "response_sha256": self.response.sha256,
                     "live_request": self.response.live_request, "point_count": len(self.retention),
                     "credentials_saved": False}
-        for name, data in {
+        files = {
             "insights.json": json.dumps(self.to_dict(), ensure_ascii=False, indent=2, allow_nan=False),
-            "retention.csv": buffer.getvalue(), "retention.svg": _wire.svg_chart(points, self.media_id),
             "response.json": json.dumps(self.response.payload, ensure_ascii=False, indent=2, allow_nan=False),
             "manifest.json": json.dumps(manifest, ensure_ascii=False, indent=2),
-        }.items():
+        }
+        if self.retention_available:
+            files.update({"retention.csv": buffer.getvalue(), "retention.svg": _wire.svg_chart(points, self.media_id)})
+        for name, data in files.items():
             _wire.private_write(directory / name, data)
         return directory
 
@@ -173,19 +227,23 @@ class EditsClient:
         pk = _wire.media_id(media)
         response = self.execute("BaselReelDetailsQuery", {
             "media_id": pk, "include_creative_tools": include_creative_tools})
-        points, metadata = _wire.extract_curve(response.payload, pk, self._session.user_id)
+        points, metadata = _wire.extract_curve(response.payload, pk, self._session.user_id, allow_unavailable=True)
         node = response.payload["data"][metadata["wire_media_field"]]["basel_media_level_insights"]
         metrics = {key: _metric(value) for key, value in node.items() if key != "reels_retentions"}
         return ReelInsights(pk, tuple(RetentionPoint(p["index"], p["value"]) for p in points),
                             metrics, metadata, response)
 
     def retention(self, media: str) -> tuple[RetentionPoint, ...]:
-        return self.reel_insights(media).retention
+        result = self.reel_insights(media)
+        if not result.retention_available:
+            raise _wire.RetentionError("Retention is unavailable; use reel_insights() to obtain the other metrics.")
+        return result.retention
 
     def public_insights(self, media: str) -> QueryResult:
         return self.execute("BaselPublicInsightsQuery", {"media_id": _wire.media_id(media)})
 
-    def account_insights(self, *, period: str, user_id=None, include_time_series=False) -> QueryResult:
+    def account_insights(self, *, period: str = "LAST_30_DAYS", user_id=None, include_time_series=False) -> QueryResult:
+        self._validate_period(period)
         return self.execute("BaselAccountLevelInsightsQuery", {
             "user_id": user_id or self._session.user_id, "period": period,
             "shouldIncludeTimeSeries": include_time_series})
@@ -205,7 +263,28 @@ class EditsClient:
             "timeframe": timeframe, "order_by": order_by, "sort_direction": sort_direction,
             "skip_follow_count": skip_follow_count})
 
-    def audience_insights(self, *, period: str, client_timezone: str, user_id=None) -> QueryResult:
+    def reels_page(self, **kwargs) -> ReelsPage:
+        response = self.account_reels(**kwargs)
+        connection = response.get_data("xig_user_by_igid_v2", "basel_insights", "user_reel_dicts")
+        if not isinstance(connection, dict) or not isinstance(connection.get("edges"), list):
+            raise _wire.RetentionError("Missing Reel connection in account response.")
+        page = connection.get("page_info")
+        if not isinstance(page, dict) or type(page.get("has_next_page")) is not bool:
+            raise _wire.RetentionError("Invalid page_info in account response.")
+        cursor = page.get("end_cursor")
+        if cursor is not None and not isinstance(cursor, str):
+            raise _wire.RetentionError("Invalid end_cursor in account response.")
+        if page["has_next_page"] and not cursor:
+            raise _wire.RetentionError("has_next_page=true without end_cursor.")
+        nodes = []
+        for edge in connection["edges"]:
+            if not isinstance(edge, dict) or not isinstance(edge.get("node"), dict):
+                raise _wire.RetentionError("Invalid Reel edge in account response.")
+            nodes.append(edge["node"])
+        return ReelsPage(tuple(nodes), page["has_next_page"], cursor, response)
+
+    def audience_insights(self, *, period: str = "LAST_30_DAYS", client_timezone: str = "UTC", user_id=None) -> QueryResult:
+        self._validate_period(period)
         return self.execute("BaselAudienceInsightsQuery", {
             "user_id": user_id or self._session.user_id, "period": period, "client_timezone": client_timezone})
 
@@ -215,6 +294,24 @@ class EditsClient:
         return self.execute("XIGBaselAccountLevelReelsDataDeltaQuery", {
             "media_ids": [_wire.media_id(media) for media in media_ids]})
 
-    def comment_insights(self, media: str, *, sort_order: str) -> QueryResult:
+    def comment_insights(self, media: str, *, sort_order: str = "recent") -> QueryResult:
+        if sort_order not in {"popular", "recent"}:
+            raise _wire.RetentionError("sort_order must be 'popular' or 'recent'.")
         return self.execute("XIGBaselInsightsCommentsQuery", {
             "media_id": _wire.media_id(media), "sort_order": sort_order})
+
+    def kits(self, *, after: str | None = None) -> QueryResult:
+        """Read the Kits connection; an empty list is a valid response."""
+        return self.execute("BaselKitsQuery", {"after": after})
+
+    def extended_reel_insights(self, media: str, *, bloks_versioning_id: str) -> QueryResult:
+        """Read the alternative Instagram insights branch with its explicit version."""
+        if not isinstance(bloks_versioning_id, str) or not bloks_versioning_id:
+            raise _wire.RetentionError("bloks_versioning_id is required; see the versioned method documentation.")
+        return self.execute("ReelInsightsQuery", {
+            "mediaIgid": _wire.media_id(media), "bloksVersioningId": bloks_versioning_id})
+
+    @staticmethod
+    def _validate_period(period):
+        if period not in {"LAST_7_DAYS", "LAST_14_DAYS", "LAST_30_DAYS", "LAST_60_DAYS", "LAST_90_DAYS", "LAST_180_DAYS"}:
+            raise _wire.RetentionError("Unsupported period for this APK version.")

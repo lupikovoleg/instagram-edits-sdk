@@ -16,12 +16,15 @@ def main(argv=None):
     retention = sub.add_parser("retention", help="Fetch and export one owned Reel")
     retention.add_argument("media")
     retention.add_argument("--output", type=Path, required=True)
+    insights = sub.add_parser("insights", help="Fetch Reel statistics even when retention is unavailable")
+    insights.add_argument("media")
+    insights.add_argument("--output", type=Path, required=True)
     query = sub.add_parser("request", help="Execute a named, versioned operation")
     query.add_argument("operation")
     query.add_argument("--variables", type=Path, required=True, help="Path to a JSON object")
     query.add_argument("--output", type=Path, required=True, help="New private JSON output file")
     query.add_argument("--allow-mutation", action="store_true")
-    for command in (retention, query):
+    for command in (retention, insights, query):
         command.add_argument("--session", type=Path, help="Settings JSON; '-' reads stdin; default uses environment")
         command.add_argument("--host", choices=("i.instagram.com", "b.i.instagram.com"), default="i.instagram.com")
         command.add_argument("--timeout", type=float, default=30)
@@ -32,10 +35,13 @@ def main(argv=None):
             return 0
         session = Session.from_settings(args.session) if args.session else Session.from_env()
         client = EditsClient(session, host=args.host, timeout=args.timeout)
-        if args.command == "retention":
+        if args.command in ("retention", "insights"):
             result = client.reel_insights(args.media)
+            if args.command == "retention" and not result.retention_available:
+                raise EditsError("Retention is unavailable; use the insights command for the other metrics.")
             result.export(args.output)
-            print(f"Saved {len(result.retention)} retention points to {args.output}")
+            print(f"Saved {len(result.retention)} retention points to {args.output}" if result.retention_available
+                  else f"Saved statistics to {args.output}; retention is unavailable.")
         else:
             variables = json.loads(args.variables.read_text(encoding="utf-8"))
             result = client.execute(args.operation, variables, allow_mutation=args.allow_mutation)

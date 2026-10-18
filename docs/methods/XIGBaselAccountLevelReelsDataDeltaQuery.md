@@ -5,9 +5,11 @@
 - **client_doc_id:** `15638181364556178962628739248`
 - **schema:** `instagram`
 - **kind:** `query`
-- **evidence:** `static-contract`
+- **evidence:** `live-verified`
 
-**На сервере не проверено.** Параметры восстановлены из APK; ниже нет гарантии актуальной доступности этому аккаунту.
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** Metrics returned for one supplied media ID; multi-ID capacity not tested
 
 ## Variables
 

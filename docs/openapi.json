@@ -1,0 +1,827 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Instagram Edits internal API — research reference",
+    "version": "0.2.0",
+    "description": "Unofficial reference, not affiliated with Meta. Nine read operations exercised on one consenting account on 2026-10-18. Comment analysis returned null; Kits was empty. One real POST endpoint with named persisted-query examples. No public REST gateway is provided. Credentials must stay in your backend."
+  },
+  "servers": [
+    {
+      "url": "https://i.instagram.com",
+      "description": "Host used in recorded live checks"
+    }
+  ],
+  "security": [
+    {
+      "InstagramSession": []
+    }
+  ],
+  "paths": {
+    "/graphql_www": {
+      "post": {
+        "operationId": "executePersistedInstagramQuery",
+        "summary": "Execute a named persisted read query",
+        "description": "Choose a request example. Friendly-name and document-ID headers must match its form fields. variables is a JSON string. For operational calls use the Python SDK: it handles aliases, NDJSON, ownership and response validation. Examples contain synthetic account/media IDs.",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Instagram 1.0 Android",
+            "description": "Tested fallback client profile."
+          },
+          {
+            "name": "X-IG-App-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "954255173121948",
+            "description": "Edits application ID."
+          },
+          {
+            "name": "IG-INTENDED-USER-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "999",
+            "description": "Current session user ID; example is synthetic."
+          },
+          {
+            "name": "IG-U-DS-USER-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "999",
+            "description": "Current session user ID; example is synthetic."
+          },
+          {
+            "name": "X-FB-Friendly-Name",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "BaselReelDetailsQuery",
+            "description": "Must match fb_api_req_friendly_name in the form."
+          },
+          {
+            "name": "X-Client-Doc-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "3261342854360971614358769315",
+            "description": "Must match client_doc_id in the form."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLForm"
+              },
+              "examples": {
+                "BaselReelDetailsQuery": {
+                  "summary": "BaselReelDetailsQuery",
+                  "description": "62 retention points and Reel metrics returned. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselReelDetailsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "3261342854360971614358769315",
+                    "variables": "{\"media_id\":\"12345\",\"include_creative_tools\":false}"
+                  }
+                },
+                "BaselPublicInsightsQuery": {
+                  "summary": "BaselPublicInsightsQuery",
+                  "description": "Public metric counts and rates returned for the owned Reel. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselPublicInsightsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "32880071334541180518965887244",
+                    "variables": "{\"media_id\":\"12345\"}"
+                  }
+                },
+                "BaselAccountLevelInsightsQuery": {
+                  "summary": "BaselAccountLevelInsightsQuery",
+                  "description": "Account aggregates and time series returned; LAST_30_DAYS. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselAccountLevelInsightsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "279077652713939115792325780352",
+                    "variables": "{\"user_id\":\"999\",\"period\":\"LAST_30_DAYS\",\"shouldIncludeTimeSeries\":true}"
+                  }
+                },
+                "BaselAccountLevelReelsQuery": {
+                  "summary": "BaselAccountLevelReelsQuery",
+                  "description": "3 Reel nodes, next cursor present; second page verified separately. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselAccountLevelReelsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "11900819615835482353778696516",
+                    "variables": "{\"user_id\":\"999\",\"first\":3,\"after\":null,\"timeframe\":\"LIFETIME\",\"order_by\":\"BY_DATE\",\"sort_direction\":\"DESCENDING\",\"skip_follow_count\":false}"
+                  }
+                },
+                "BaselAudienceInsightsQuery": {
+                  "summary": "BaselAudienceInsightsQuery",
+                  "description": "Age, gender, location, follower activity and growth data returned. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselAudienceInsightsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "416010146012703390907640345604",
+                    "variables": "{\"user_id\":\"999\",\"period\":\"LAST_30_DAYS\",\"client_timezone\":\"Europe/Moscow\"}"
+                  }
+                },
+                "XIGBaselAccountLevelReelsDataDeltaQuery": {
+                  "summary": "XIGBaselAccountLevelReelsDataDeltaQuery",
+                  "description": "Metrics returned for one supplied media ID; multi-ID capacity not tested. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "XIGBaselAccountLevelReelsDataDeltaQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "15638181364556178962628739248",
+                    "variables": "{\"media_ids\":[\"12345\"]}"
+                  }
+                },
+                "XIGBaselInsightsCommentsQuery": {
+                  "summary": "XIGBaselInsightsCommentsQuery",
+                  "description": "Request accepted; ai_comment_insights was null; populated analysis not verified. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "XIGBaselInsightsCommentsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "29719058955793752815580108112",
+                    "variables": "{\"media_id\":\"12345\",\"sort_order\":\"recent\"}"
+                  }
+                },
+                "BaselKitsQuery": {
+                  "summary": "BaselKitsQuery",
+                  "description": "Request accepted; edges empty and has_next_page=false; populated Kits not verified. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "BaselKitsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "57198449616693595270598413994",
+                    "variables": "{\"after\":null}"
+                  }
+                },
+                "ReelInsightsQuery": {
+                  "summary": "ReelInsightsQuery",
+                  "description": "Alternative retention curve and demographics returned; NDJSON response parsed. IDs in this example are synthetic.",
+                  "value": {
+                    "method": "post",
+                    "pretty": "false",
+                    "format": "json",
+                    "server_timestamps": "true",
+                    "locale": "user",
+                    "fb_api_req_friendly_name": "ReelInsightsQuery",
+                    "purpose": "fetch",
+                    "enable_canonical_naming": "true",
+                    "enable_canonical_variable_overrides": "true",
+                    "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                    "client_doc_id": "34117726176169458716316101",
+                    "variables": "{\"mediaIgid\":\"12345\",\"bloksVersioningId\":\"8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect GraphQL errors and payload availability. Can be a JSON document or NDJSON even with text MIME types.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              },
+              "text/javascript": {
+                "schema": {
+                  "type": "string",
+                  "description": "JSON document with a text MIME type."
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "description": "Observed NDJSON response for ReelInsightsQuery."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session invalid or expired; do not retry blindly."
+          },
+          "403": {
+            "description": "Access refused or challenge; no bypass implemented."
+          },
+          "429": {
+            "description": "Rate limited; stop automated requests."
+          }
+        },
+        "x-persisted-queries": [
+          {
+            "operation": "BaselReelDetailsQuery",
+            "client_doc_id": "3261342854360971614358769315",
+            "variables": {
+              "$ref": "#/components/schemas/BaselReelDetailsQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "BaselPublicInsightsQuery",
+            "client_doc_id": "32880071334541180518965887244",
+            "variables": {
+              "$ref": "#/components/schemas/BaselPublicInsightsQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "BaselAccountLevelInsightsQuery",
+            "client_doc_id": "279077652713939115792325780352",
+            "variables": {
+              "$ref": "#/components/schemas/BaselAccountLevelInsightsQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "BaselAccountLevelReelsQuery",
+            "client_doc_id": "11900819615835482353778696516",
+            "variables": {
+              "$ref": "#/components/schemas/BaselAccountLevelReelsQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "BaselAudienceInsightsQuery",
+            "client_doc_id": "416010146012703390907640345604",
+            "variables": {
+              "$ref": "#/components/schemas/BaselAudienceInsightsQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "XIGBaselAccountLevelReelsDataDeltaQuery",
+            "client_doc_id": "15638181364556178962628739248",
+            "variables": {
+              "$ref": "#/components/schemas/XIGBaselAccountLevelReelsDataDeltaQueryVariables"
+            },
+            "evidence": "data"
+          },
+          {
+            "operation": "XIGBaselInsightsCommentsQuery",
+            "client_doc_id": "29719058955793752815580108112",
+            "variables": {
+              "$ref": "#/components/schemas/XIGBaselInsightsCommentsQueryVariables"
+            },
+            "evidence": "unavailable"
+          },
+          {
+            "operation": "BaselKitsQuery",
+            "client_doc_id": "57198449616693595270598413994",
+            "variables": {
+              "$ref": "#/components/schemas/BaselKitsQueryVariables"
+            },
+            "evidence": "empty"
+          },
+          {
+            "operation": "ReelInsightsQuery",
+            "client_doc_id": "34117726176169458716316101",
+            "variables": {
+              "$ref": "#/components/schemas/ReelInsightsQueryVariables"
+            },
+            "evidence": "data"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "InstagramSession": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "IGT:2:<base64 JSON session envelope>",
+        "description": "Sensitive session credential, not a public Graph API token. See authentication.md. Do not paste live credentials into the documentation viewer."
+      }
+    },
+    "schemas": {
+      "BaselReelDetailsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "description": "string: внутренний ID Reel"
+          },
+          "include_creative_tools": {
+            "type": "boolean",
+            "description": "boolean: значение feature flag клиента"
+          }
+        },
+        "required": [
+          "media_id",
+          "include_creative_tools"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "media_id": "12345",
+          "include_creative_tools": false
+        },
+        "description": "Object serialized to the JSON string in the variables form field. 62 retention points and Reel metrics returned"
+      },
+      "BaselPublicInsightsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "description": "string"
+          }
+        },
+        "required": [
+          "media_id"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "media_id": "12345"
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Public metric counts and rates returned for the owned Reel"
+      },
+      "BaselAccountLevelInsightsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "string: userId текущей UserSession"
+          },
+          "period": {
+            "type": "string",
+            "enum": [
+              "LAST_7_DAYS",
+              "LAST_14_DAYS",
+              "LAST_30_DAYS",
+              "LAST_60_DAYS",
+              "LAST_90_DAYS",
+              "LAST_180_DAYS"
+            ],
+            "description": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS"
+          },
+          "shouldIncludeTimeSeries": {
+            "type": "boolean",
+            "description": "boolean"
+          }
+        },
+        "required": [
+          "user_id",
+          "period",
+          "shouldIncludeTimeSeries"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "user_id": "999",
+          "period": "LAST_30_DAYS",
+          "shouldIncludeTimeSeries": true
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Account aggregates and time series returned; LAST_30_DAYS"
+      },
+      "BaselAccountLevelReelsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "string"
+          },
+          "first": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "integer: размер страницы"
+          },
+          "after": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "string/null: cursor"
+          },
+          "timeframe": {
+            "type": "string",
+            "enum": [
+              "LIFETIME",
+              "ONE_WEEK",
+              "TWO_WEEKS",
+              "ONE_MONTH",
+              "ONE_YEAR"
+            ],
+            "description": "LIFETIME | ONE_WEEK | TWO_WEEKS | ONE_MONTH | ONE_YEAR"
+          },
+          "order_by": {
+            "type": "string",
+            "enum": [
+              "BY_DATE",
+              "BY_VIEWS",
+              "BY_LIKES",
+              "BY_COMMENTS",
+              "BY_REPOSTS",
+              "BY_SHARES",
+              "BY_SAVES",
+              "BY_FOLLOWERS",
+              "BY_SKIP_RATE"
+            ],
+            "description": "BY_DATE | BY_VIEWS | BY_LIKES | BY_COMMENTS | BY_REPOSTS | BY_SHARES | BY_SAVES | BY_FOLLOWERS | BY_SKIP_RATE"
+          },
+          "sort_direction": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "ASCENDING",
+              "DESCENDING",
+              null
+            ],
+            "description": "ASCENDING | DESCENDING | null"
+          },
+          "skip_follow_count": {
+            "type": "boolean",
+            "description": "boolean: клиент выставляет по flag и выбранной сортировке"
+          }
+        },
+        "required": [
+          "user_id",
+          "first",
+          "after",
+          "timeframe",
+          "order_by",
+          "sort_direction",
+          "skip_follow_count"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "user_id": "999",
+          "first": 3,
+          "after": null,
+          "timeframe": "LIFETIME",
+          "order_by": "BY_DATE",
+          "sort_direction": "DESCENDING",
+          "skip_follow_count": false
+        },
+        "description": "Object serialized to the JSON string in the variables form field. 3 Reel nodes, next cursor present; second page verified separately"
+      },
+      "BaselAudienceInsightsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "string: текущий UserSession.userId"
+          },
+          "period": {
+            "type": "string",
+            "enum": [
+              "LAST_7_DAYS",
+              "LAST_14_DAYS",
+              "LAST_30_DAYS",
+              "LAST_60_DAYS",
+              "LAST_90_DAYS",
+              "LAST_180_DAYS"
+            ],
+            "description": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS"
+          },
+          "client_timezone": {
+            "type": "string",
+            "description": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "period",
+          "client_timezone"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "user_id": "999",
+          "period": "LAST_30_DAYS",
+          "client_timezone": "Europe/Moscow"
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Age, gender, location, follower activity and growth data returned"
+      },
+      "XIGBaselAccountLevelReelsDataDeltaQueryVariables": {
+        "type": "object",
+        "properties": {
+          "media_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "array<string>"
+          }
+        },
+        "required": [
+          "media_ids"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "media_ids": [
+            "12345"
+          ]
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Metrics returned for one supplied media ID; multi-ID capacity not tested"
+      },
+      "XIGBaselInsightsCommentsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "description": "string"
+          },
+          "sort_order": {
+            "type": "string",
+            "enum": [
+              "recent",
+              "popular"
+            ],
+            "description": "recent | popular; live tested recent"
+          }
+        },
+        "required": [
+          "media_id",
+          "sort_order"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "media_id": "12345",
+          "sort_order": "recent"
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Request accepted; ai_comment_insights was null; populated analysis not verified"
+      },
+      "BaselKitsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "after": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "string/null: cursor"
+          }
+        },
+        "required": [
+          "after"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "after": null
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Request accepted; edges empty and has_next_page=false; populated Kits not verified"
+      },
+      "ReelInsightsQueryVariables": {
+        "type": "object",
+        "properties": {
+          "mediaIgid": {
+            "type": "string",
+            "description": "string"
+          },
+          "bloksVersioningId": {
+            "type": "string",
+            "description": "string; tested APK version: 8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8"
+          }
+        },
+        "required": [
+          "mediaIgid",
+          "bloksVersioningId"
+        ],
+        "additionalProperties": false,
+        "example": {
+          "mediaIgid": "12345",
+          "bloksVersioningId": "8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8"
+        },
+        "description": "Object serialized to the JSON string in the variables form field. Alternative retention curve and demographics returned; NDJSON response parsed"
+      },
+      "GraphQLForm": {
+        "type": "object",
+        "required": [
+          "method",
+          "pretty",
+          "format",
+          "server_timestamps",
+          "locale",
+          "fb_api_req_friendly_name",
+          "purpose",
+          "enable_canonical_naming",
+          "enable_canonical_variable_overrides",
+          "enable_canonical_naming_ambiguous_type_prefixing",
+          "client_doc_id",
+          "variables"
+        ],
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "pretty": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "server_timestamps": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "fb_api_req_friendly_name": {
+            "type": "string",
+            "enum": [
+              "BaselReelDetailsQuery",
+              "BaselPublicInsightsQuery",
+              "BaselAccountLevelInsightsQuery",
+              "BaselAccountLevelReelsQuery",
+              "BaselAudienceInsightsQuery",
+              "XIGBaselAccountLevelReelsDataDeltaQuery",
+              "XIGBaselInsightsCommentsQuery",
+              "BaselKitsQuery",
+              "ReelInsightsQuery"
+            ]
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "enable_canonical_naming": {
+            "type": "string"
+          },
+          "enable_canonical_variable_overrides": {
+            "type": "string"
+          },
+          "enable_canonical_naming_ambiguous_type_prefixing": {
+            "type": "string"
+          },
+          "client_doc_id": {
+            "type": "string",
+            "description": "Persisted query ID matching the friendly name; see examples."
+          },
+          "variables": {
+            "type": "string",
+            "description": "JSON serialized as one string, not a nested form object. See named Variables schemas."
+          }
+        }
+      },
+      "GraphQLResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "hasNext": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "description": "Logical paths can appear as canonical keys such as 1$xig_fetch_media(id:$media_id). HTTP 200 can contain GraphQL errors. Some responses are NDJSON incremental patches."
+      },
+      "RetentionPoint": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Normalized retention fraction: 1 = 100%; zero is distinct from null."
+          },
+          "percent": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "index",
+          "value"
+        ],
+        "description": "SDK normalized representation; raw API may use 1fvalue."
+      },
+      "ReelSnapshot": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string"
+          },
+          "retention_available": {
+            "type": "boolean"
+          },
+          "retention": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RetentionPoint"
+            }
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "media_id",
+          "retention_available",
+          "retention",
+          "metrics",
+          "metadata"
+        ],
+        "description": "Output of SDK ReelInsights.to_dict(), not a separate REST endpoint."
+      }
+    }
+  }
+}

@@ -8,20 +8,20 @@
 
 | Метод | Уровень | Назначение |
 |---|---|---|
-| [BaselAccountLevelInsightsQuery](methods/BaselAccountLevelInsightsQuery.md) | `static-contract` | Сводная аналитика аккаунта, с опциональными временными рядами. |
-| [BaselAccountLevelReelsQuery](methods/BaselAccountLevelReelsQuery.md) | `static-contract` | Постраничный список Reels аккаунта, сортировка по метрикам, в том числе по пропускам. |
-| [BaselAudienceInsightsQuery](methods/BaselAudienceInsightsQuery.md) | `static-contract` | Аналитика аудитории аккаунта с учётом периода и часового пояса. |
+| [BaselAccountLevelInsightsQuery](methods/BaselAccountLevelInsightsQuery.md) | `live-verified` | Сводная аналитика аккаунта, с опциональными временными рядами. |
+| [BaselAccountLevelReelsQuery](methods/BaselAccountLevelReelsQuery.md) | `live-verified` | Постраничный список Reels аккаунта, сортировка по метрикам, в том числе по пропускам. |
+| [BaselAudienceInsightsQuery](methods/BaselAudienceInsightsQuery.md) | `live-verified` | Аналитика аудитории аккаунта с учётом периода и часового пояса. |
 | [BaselKitClearDefaultMutation](methods/BaselKitClearDefaultMutation.md) | `static-contract` | Снять назначение набора по умолчанию. |
 | [BaselKitCreateMutation](methods/BaselKitCreateMutation.md) | `static-contract` | Создание набора элементов. Изменяет данные аккаунта. |
 | [BaselKitDeleteMutation](methods/BaselKitDeleteMutation.md) | `static-contract` | Удаление набора элементов. |
 | [BaselKitSetDefaultMutation](methods/BaselKitSetDefaultMutation.md) | `static-contract` | Установить набором по умолчанию. |
 | [BaselKitUpdateMutation](methods/BaselKitUpdateMutation.md) | `static-contract` | Обновление набора элементов. Изменяет данные аккаунта. |
-| [BaselKitsQuery](methods/BaselKitsQuery.md) | `static-contract` | Чтение наборов переиспользуемых элементов Edits. |
-| [BaselPublicInsightsQuery](methods/BaselPublicInsightsQuery.md) | `static-contract` | Публичная сокращённая статистика Reel. Не доказана как источник авторского графика удержания. |
+| [BaselKitsQuery](methods/BaselKitsQuery.md) | `live-verified` | Чтение наборов переиспользуемых элементов Edits. |
+| [BaselPublicInsightsQuery](methods/BaselPublicInsightsQuery.md) | `live-verified` | Публичная сокращённая статистика Reel. Не доказана как источник авторского графика удержания. |
 | [BaselReelDetailsQuery](methods/BaselReelDetailsQuery.md) | `live-verified` | Детальная авторская аналитика Reel, включая числовые точки удержания. Основной найденный метод для исходной задачи. |
-| [ReelInsightsQuery](methods/ReelInsightsQuery.md) | `static-contract` | Альтернативная ветка аналитики Reels в общем коде Instagram. Не доказано, что экран Edits использует именно её. |
-| [XIGBaselAccountLevelReelsDataDeltaQuery](methods/XIGBaselAccountLevelReelsDataDeltaQuery.md) | `static-contract` | Пакетное обновление метрик выбранных Reels. |
-| [XIGBaselInsightsCommentsQuery](methods/XIGBaselInsightsCommentsQuery.md) | `static-contract` | Аналитика комментариев выбранного Reel. |
+| [ReelInsightsQuery](methods/ReelInsightsQuery.md) | `live-verified` | Альтернативная ветка аналитики Reels в общем коде Instagram. Не доказано, что экран Edits использует именно её. |
+| [XIGBaselAccountLevelReelsDataDeltaQuery](methods/XIGBaselAccountLevelReelsDataDeltaQuery.md) | `live-verified` | Пакетное обновление метрик выбранных Reels. |
+| [XIGBaselInsightsCommentsQuery](methods/XIGBaselInsightsCommentsQuery.md) | `live-verified` | Аналитика комментариев выбранного Reel. |
 | [XIGBaselInsightsRetentionSummaryMutation](methods/XIGBaselInsightsRetentionSummaryMutation.md) | `static-contract` | Генерация текстового разбора удержания и hook analysis. Это отдельный вызов, не массив точек графика. |
 
 ## Остальные операции с именами Basel / Eddy
@@ -44,11 +44,11 @@
 | `GetBaselOnboardingInfoQuery` | query | `33902372673317392047945990110` | static-reference |
 | `ResetBaselOnboardingMutation` | mutation | `143962487615461026201602993924` | registry-only |
 | `SetBaselOnboardingMutation` | mutation | `34399958464663015328171836228` | static-reference |
-| `BaselAccountLevelInsightsQuery` | query | `279077652713939115792325780352` | static-contract |
-| `BaselAccountLevelReelsQuery` | query | `11900819615835482353778696516` | static-contract |
+| `BaselAccountLevelInsightsQuery` | query | `279077652713939115792325780352` | live-verified |
+| `BaselAccountLevelReelsQuery` | query | `11900819615835482353778696516` | live-verified |
 | `BaselAppInstallOnboardedBFFsQueryQuery` | query | `324948423116457329790692969758` | static-reference |
 | `BaselAppStickyNoteDeletionStatus` | not-inferred | `37953982910939554770791661338` | static-reference |
-| `BaselAudienceInsightsQuery` | query | `416010146012703390907640345604` | static-contract |
+| `BaselAudienceInsightsQuery` | query | `416010146012703390907640345604` | live-verified |
 | `BaselBatchSetUserInterestPreferences` | not-inferred | `400578367514659592934858223882` | static-reference |
 | `BaselConvoStartersQuery` | query | `32924785613615245411984394618` | static-reference |
 | `BaselCreateCaptionStyleMutation` | mutation | `22266339806216110982799019080` | static-reference |
@@ -73,9 +73,9 @@
 | `BaselKitQuery` | query | `25203172192950179050102923575` | registry-only |
 | `BaselKitSetDefaultMutation` | mutation | `227627550715913420820782541062` | static-contract |
 | `BaselKitUpdateMutation` | mutation | `19437238033720027386254691847` | static-contract |
-| `BaselKitsQuery` | query | `57198449616693595270598413994` | static-contract |
+| `BaselKitsQuery` | query | `57198449616693595270598413994` | live-verified |
 | `BaselPopularTopicsV2Query` | query | `12568638147687796215763485378` | static-reference |
-| `BaselPublicInsightsQuery` | query | `32880071334541180518965887244` | static-contract |
+| `BaselPublicInsightsQuery` | query | `32880071334541180518965887244` | live-verified |
 | `BaselReelCarouselThumbnailsQuery` | query | `37793682035709244311952866661` | registry-only |
 | `BaselReelDetailsQuery` | query | `3261342854360971614358769315` | live-verified |
 | `BaselRemoveInterestPreference` | not-inferred | `279730435114630214776219557974` | static-reference |
@@ -114,7 +114,7 @@
 | `SaveBaselReframeElementMutation` | mutation | `19604600844375373728835386372` | static-reference |
 | `UnsaveBaselReframeElementMutation` | mutation | `97539861911428219167129448826` | static-reference |
 | `XIGBaselAccountLevelCommentsQuery` | query | `11102125853857433107054303616` | static-reference |
-| `XIGBaselAccountLevelReelsDataDeltaQuery` | query | `15638181364556178962628739248` | static-contract |
+| `XIGBaselAccountLevelReelsDataDeltaQuery` | query | `15638181364556178962628739248` | live-verified |
 | `XIGBaselInsightsAccountLevelQuery` | query | `106742138712043730756309692905` | static-reference |
-| `XIGBaselInsightsCommentsQuery` | query | `29719058955793752815580108112` | static-contract |
+| `XIGBaselInsightsCommentsQuery` | query | `29719058955793752815580108112` | live-verified |
 | `XIGBaselInsightsRetentionSummaryMutation` | mutation | `26704303781083176767119591657` | static-contract |

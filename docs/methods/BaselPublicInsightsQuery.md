@@ -5,9 +5,11 @@
 - **client_doc_id:** `32880071334541180518965887244`
 - **schema:** `instagram`
 - **kind:** `query`
-- **evidence:** `static-contract`
+- **evidence:** `live-verified`
 
-**На сервере не проверено.** Параметры восстановлены из APK; ниже нет гарантии актуальной доступности этому аккаунту.
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** Public metric counts and rates returned for the owned Reel
 
 ## Variables
 

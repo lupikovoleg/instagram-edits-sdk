@@ -5,9 +5,11 @@
 - **client_doc_id:** `57198449616693595270598413994`
 - **schema:** `instagram`
 - **kind:** `query`
-- **evidence:** `static-contract`
+- **evidence:** `live-verified`
 
-**На сервере не проверено.** Параметры восстановлены из APK; ниже нет гарантии актуальной доступности этому аккаунту.
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** Request accepted; edges empty and has_next_page=false; populated Kits not verified
 
 ## Variables
 
@@ -17,7 +19,7 @@
 
 ## Ответ
 
-xig_basel_kits; точная вложенная структура — в schema/коде
+xig_basel_kits.kits(after:$after,first:50): {edges, page_info}; empty in the live test
 
 ## Вызов из вашей системы
 

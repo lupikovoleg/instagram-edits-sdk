@@ -1,11 +1,11 @@
-"""Live, static-only contract: period must come from your verified client contract."""
+"""Fetch account or audience statistics; LAST_30_DAYS was live-tested."""
 import argparse
 from edits_api import EditsClient, EditsError
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--period", required=True, help="Verified server period, enum not recovered here")
+    parser.add_argument("--period", default="LAST_30_DAYS", help="Period enum, default LAST_30_DAYS")
     parser.add_argument("--audience", action="store_true", help="Use BaselAudienceInsightsQuery")
     parser.add_argument("--timezone", default="UTC")
     parser.add_argument("--output", required=True, help="New JSON file")

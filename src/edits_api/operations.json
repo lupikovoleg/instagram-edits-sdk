@@ -3696,16 +3696,20 @@
     "kind": "query",
     "description": "Сводная аналитика аккаунта, с опциональными временными рядами.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "user_id": "string: userId текущей UserSession",
-      "period": "string, диапазон допустимых значений в этой работе не подтверждён",
+      "period": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS",
       "shouldIncludeTimeSeries": "boolean"
     },
     "returns": "xig_user_by_igid_v2 и вложенные агрегаты аккаунта",
     "source_references": [
-      "decompiled/sources/com/instagram/basel/insight/data/remote/BaselAccountLevelInsightsRemoteSource.java:494"
-    ]
+      "decompiled/sources/com/instagram/basel/insight/data/remote/BaselAccountLevelInsightsRemoteSource.java:494",
+      "decompiled/sources/X/EnumC38315FHu.java",
+      "decompiled/sources/X/C73666Usk.java:1844"
+    ],
+    "live_observation": "Account aggregates and time series returned; LAST_30_DAYS",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "BaselAccountLevelReelsQuery",
@@ -3714,7 +3718,7 @@
     "kind": "query",
     "description": "Постраничный список Reels аккаунта, сортировка по метрикам, в том числе по пропускам.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "user_id": "string",
       "order_by": "BY_DATE | BY_VIEWS | BY_LIKES | BY_COMMENTS | BY_REPOSTS | BY_SHARES | BY_SAVES | BY_FOLLOWERS | BY_SKIP_RATE",
@@ -3727,7 +3731,9 @@
     "returns": "xig_user_by_igid_v2; список Reels и информация пагинации",
     "source_references": [
       "analysis/early-java/sources/com/instagram/basel/insight/data/remote/BaselAccountLevelInsightsRemoteSource.java:973"
-    ]
+    ],
+    "live_observation": "3 Reel nodes, next cursor present; second page verified separately",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "BaselAppInstallOnboardedBFFsQueryQuery",
@@ -3754,16 +3760,20 @@
     "kind": "query",
     "description": "Аналитика аудитории аккаунта с учётом периода и часового пояса.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "user_id": "string: текущий UserSession.userId",
-      "period": "string: допустимые значения не восстановлены",
+      "period": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS",
       "client_timezone": "string"
     },
     "returns": "xig_user_by_igid_v2 и метрики аудитории; точные разделы зависят от доступности данных",
     "source_references": [
-      "decompiled/sources/com/instagram/basel/insight/data/remote/BaselAudienceInsightsRemoteSource.java:427"
-    ]
+      "decompiled/sources/com/instagram/basel/insight/data/remote/BaselAudienceInsightsRemoteSource.java:427",
+      "decompiled/sources/X/EnumC38315FHu.java",
+      "decompiled/sources/X/C73666Usk.java:1844"
+    ],
+    "live_observation": "Age, gender, location, follower activity and growth data returned",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "BaselBatchSetUserInterestPreferences",
@@ -4023,14 +4033,16 @@
     "kind": "query",
     "description": "Чтение наборов переиспользуемых элементов Edits.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "after": "string/null: cursor"
     },
-    "returns": "xig_basel_kits; точная вложенная структура — в schema/коде",
+    "returns": "xig_basel_kits.kits(after:$after,first:50): {edges, page_info}; empty in the live test",
     "source_references": [
       "decompiled/sources/com/instagram/basel/workflows/kits/data/GraphQLKitsServerApi.java:636"
-    ]
+    ],
+    "live_observation": "Request accepted; edges empty and has_next_page=false; populated Kits not verified",
+    "live_semantic_status": "empty"
   },
   {
     "operation_name": "BaselPopularTopicsV2Query",
@@ -4048,14 +4060,16 @@
     "kind": "query",
     "description": "Публичная сокращённая статистика Reel. Не доказана как источник авторского графика удержания.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "media_id": "string"
     },
     "returns": "xig_fetch_media; basel_media_public_insights; счётчики взаимодействий",
     "source_references": [
       "analysis/ReelDetailsSource.java:442"
-    ]
+    ],
+    "live_observation": "Public metric counts and rates returned for the owned Reel",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "BaselReelCarouselThumbnailsQuery",
@@ -4084,7 +4098,9 @@
       "analysis/ReelDetailsSource-fallback.java:590",
       "decompiled/sources/X/AbstractC83588bo1.java:281",
       "decompiled/sources/X/AbstractC80882aUO.java:26"
-    ]
+    ],
+    "live_observation": "62 retention points and Reel metrics returned",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "BaselRemoveInterestPreference",
@@ -13336,18 +13352,21 @@
     "kind": "query",
     "description": "Альтернативная ветка аналитики Reels в общем коде Instagram. Не доказано, что экран Edits использует именно её.",
     "edits_related": false,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "mediaIgid": "string",
-      "bloksVersioningId": "версия Bloks из константы сборки"
+      "bloksVersioningId": "string; tested APK version: 8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8"
     },
-    "returns": "data.ig_reel_insights.retention.retention_curve: [{timestamp_seconds: int, percentage: number}]. Поля проверены по Java String.hashCode в обработчике ответа. Шкала percentage живым ответом не проверена.",
+    "returns": "ig_reel_insights.retention.retention_curve: [{timestamp_seconds, 1fpercentage}]. Retention percentage is a fraction in the observed response (1 = 100%); other percentage fields have different units.",
     "source_references": [
       "decompiled/sources/X/C71556TdZ.java:1403",
       "analysis/schema/pando-strings.txt:16440",
       "bytecode/sources/com/instagram/insights/organic/reel/data/graphql/GraphQLReelInsightsDataSource$subscribe$1.java:740",
-      "bytecode/sources/X/AnonymousClass218.java:22"
-    ]
+      "bytecode/sources/X/AnonymousClass218.java:22",
+      "decompiled/sources/X/AnonymousClass000.java:5540"
+    ],
+    "live_observation": "Alternative retention curve and demographics returned; NDJSON response parsed",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "RefreshChapterMediaMutationMutation",
@@ -14922,14 +14941,16 @@
     "kind": "query",
     "description": "Пакетное обновление метрик выбранных Reels.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "media_ids": "array<string>"
     },
     "returns": "xig_basel_multi_media_insights_query",
     "source_references": [
       "decompiled/sources/X/C93740nPz.java:361"
-    ]
+    ],
+    "live_observation": "Metrics returned for one supplied media ID; multi-ID capacity not tested",
+    "live_semantic_status": "data"
   },
   {
     "operation_name": "XIGBaselInsightsAccountLevelQuery",
@@ -14947,15 +14968,18 @@
     "kind": "query",
     "description": "Аналитика комментариев выбранного Reel.",
     "edits_related": true,
-    "evidence_level": "static-contract",
+    "evidence_level": "live-verified",
     "variables": {
       "media_id": "string",
-      "sort_order": "string: допустимые значения требуют проверки enum вызывающей стороны"
+      "sort_order": "recent | popular; live tested recent"
     },
-    "returns": "xig_fetch_media и блок аналитики комментариев",
+    "returns": "xig_fetch_media.ai_comment_insights; null in the live test, not an empty comment list",
     "source_references": [
-      "bytecode/sources/com/instagram/basel/insight/data/remote/BaselCommentInsightsRemoteDataSource.java:339"
-    ]
+      "bytecode/sources/com/instagram/basel/insight/data/remote/BaselCommentInsightsRemoteDataSource.java:339",
+      "decompiled/sources/X/EnumC68193RRy.java"
+    ],
+    "live_observation": "Request accepted; ai_comment_insights was null; populated analysis not verified",
+    "live_semantic_status": "unavailable"
   },
   {
     "operation_name": "XIGBaselInsightsRetentionSummaryMutation",

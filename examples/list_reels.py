@@ -1,4 +1,4 @@
-"""Live, static-only contract: fetch ONE page; no automatic cursor guessing."""
+"""Fetch ONE cursor page; pagination was verified with two pages."""
 import argparse
 from edits_api import EditsClient, EditsError
 
@@ -12,12 +12,13 @@ def main():
     parser.add_argument("--output", required=True, help="New JSON file")
     args = parser.parse_args()
     try:
-        response = EditsClient.from_env().account_reels(
+        page = EditsClient.from_env().reels_page(
             first=args.first, after=args.after, timeframe=args.timeframe, order_by=args.order_by)
-        response.save_json(args.output)
+        page.response.save_json(args.output)
     except EditsError as exc:
         parser.exit(1, f"Error: {exc}\n")
-    print(f"Raw page saved to {args.output}; inspect its actual cursor before continuing.")
+    print(f"Saved {len(page.items)} Reels to {args.output}; has_next_page={page.has_next_page}")
+    # page.next_cursor can be passed to the next call; treat it as account data.
 
 
 if __name__ == "__main__":

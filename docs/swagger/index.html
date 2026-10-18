@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'">
+  <title>Instagram Edits SDK — API reference</title>
+  <link rel="stylesheet" href="vendor/swagger-ui.css">
+  <style>
+    body { margin: 0; background: #fafafa; }
+    .notice { margin: 24px auto 0; max-width: 1420px; padding: 20px; font: 16px/1.6 system-ui,sans-serif; background: #eaf1ff; border-left: 4px solid #335cba; }
+    .notice strong { display: block; }
+    .query-example { max-width: 1420px; margin: 20px auto; padding: 20px; font: 16px/1.6 system-ui,sans-serif; }
+    .query-example select { display:block; max-width:100%; padding:10px; margin:10px 0; font:inherit; }
+    .query-example pre { overflow:auto; background:#172335; color:#e8f0ff; padding:20px; border-radius:6px; font:13px/1.6 monospace; }
+    .swagger-ui .auth-wrapper, .swagger-ui .authorization__btn { display: none; }
+  </style>
+</head>
+<body>
+  <div class="notice"><strong>Read-only research reference · SDK 0.2.0</strong>
+    Choose an example under POST /graphql_www to inspect one of nine tested read queries.
+    Requests and authorization entry are disabled. All viewer assets are local; no CDN or telemetry.
+    Use the Python SDK in your backend. Null comments and empty Kits are recorded availability limits.
+  </div>
+  <section class="query-example" aria-label="Persisted query examples">
+    <label for="query-choice"><strong>Query example</strong></label>
+    <select id="query-choice" aria-label="Query example"></select>
+    <p id="query-observation"></p>
+    <pre id="query-payload" aria-label="Request example"></pre>
+  </section>
+  <div id="swagger-ui"></div>
+  <script src="vendor/swagger-ui-bundle.js"></script>
+  <script src="viewer.js"></script>
+</body>
+</html>

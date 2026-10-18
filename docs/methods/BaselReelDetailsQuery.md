@@ -7,7 +7,9 @@
 - **kind:** `query`
 - **evidence:** `live-verified`
 
-Подтверждён один успешный запрос исходного исследовательского клиента. [Область проверки](../verification.md).
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** 62 retention points and Reel metrics returned
 
 ## Variables
 

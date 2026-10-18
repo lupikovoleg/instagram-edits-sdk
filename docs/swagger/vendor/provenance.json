@@ -1,0 +1,22 @@
+{
+  "package": "swagger-ui-dist",
+  "version": "5.33.3",
+  "source": "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-5.33.3.tgz",
+  "integrity": "sha512-7xJKxAjf+/ajlW/V/dMfbiY+NC5BWtbvzzdI/AsX5UzMtOMudmFz/tjuKN0jN7QVe5drKKnx01CdYEJvTFvQlw==",
+  "license": "Apache-2.0",
+  "included_files": [
+    "LICENSE",
+    "NOTICE",
+    "swagger-ui-bundle.js",
+    "swagger-ui-bundle.js.LICENSE.txt",
+    "swagger-ui.css"
+  ],
+  "license_notice_source": "https://raw.githubusercontent.com/swagger-api/swagger-ui/v5.33.3/dist/swagger-ui-bundle.js.LICENSE.txt",
+  "sha256": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "swagger-ui.css": "1ac324f7dcd27e4b9386b4bd6421271ec147e922a22c05ba24b11515e9aa6321",
+    "swagger-ui-bundle.js.LICENSE.txt": "e5a4792feaa5332dfba37f1d7adf84308b93b4f2d8da0569a9f48a3cb61c969b",
+    "swagger-ui-bundle.js": "3861ec4cc8e7b9fa9f250280da9350436e418137788282c753b9a2ac5fb7bd2f",
+    "NOTICE": "0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2"
+  }
+}

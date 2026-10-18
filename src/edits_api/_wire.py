@@ -292,7 +292,7 @@ def parse_response(body: bytes) -> dict:
         raise RetentionError("Получен незавершённый incremental GraphQL ответ (hasNext=true).")
     return root
 
-def extract_curve(payload: dict, pk: str, expected_owner: str):
+def extract_media(payload: dict, pk: str, expected_owner: str):
     data = payload.get("data")
     media_key = "xig_fetch_media"
     if isinstance(data, dict) and media_key not in data:
@@ -316,9 +316,26 @@ def extract_curve(payload: dict, pk: str, expected_owner: str):
         owner_source = "composite_media_id_suffix"
     if owner and owner != expected_owner:
         raise RetentionError("Reel принадлежит другому аккаунту, а не владельцу этой сессии.")
+    return media, {"returned_media_id": returned_id or None, "owner_id": owner or None,
+                   "owner_verified": bool(owner), "owner_id_source": owner_source,
+                   "wire_media_field": media_key}
+
+
+def extract_curve(payload: dict, pk: str, expected_owner: str, *, allow_unavailable=False):
+    media, metadata = extract_media(payload, pk, expected_owner)
     insights = media.get("basel_media_level_insights")
+    if not isinstance(insights, dict):
+        raise RetentionError("В ответе отсутствует basel_media_level_insights: статистика недоступна.")
     raw = insights.get("reels_retentions") if isinstance(insights, dict) else None
-    if not isinstance(raw, list) or not raw:
+    if raw is not None and not isinstance(raw, list):
+        raise RetentionError("Неизвестный формат reels_retentions: ожидался массив или null.")
+    if raw is None or not raw:
+        if allow_unavailable:
+            reason = ("not_returned" if "reels_retentions" not in insights
+                      else "null" if raw is None else "empty")
+            return [], {**metadata, "retention_status": "unavailable",
+                        "retention_unavailable_reason": reason, "wire_value_fields": [],
+                        "warnings": ["Удержание недоступно; остальные метрики сохранены."]}
         raise RetentionError("reels_retentions отсутствует/пуст: график не получен. HTTP 200 не означает успех.")
     points = []
     indices = []
@@ -346,17 +363,20 @@ def extract_curve(payload: dict, pk: str, expected_owner: str):
             indices.append(index)
         if value is not None and value < 0:
             warnings.append("Есть отрицательное value; исходное значение сохранено без коррекции.")
-    if not any(p["index"] is not None and p["value"] is not None for p in points):
+    available = any(p["index"] is not None and p["value"] is not None for p in points)
+    if not available and not allow_unavailable:
         raise RetentionError("Нет ни одной числовой пары index/value для графика.")
     if indices != list(range(len(raw))):
         warnings.append("Индексы не образуют последовательность 0..N-1; секунды не гарантированы, точки не интерполированы.")
     if any(p["index"] is None or p["value"] is None for p in points):
         warnings.append("Есть null: в таблице сохранены, на графике показаны разрывы.")
-    if not owner:
+    if not metadata["owner_id"]:
         warnings.append("В ответе отсутствует ID владельца; владение не проверено по полю user.")
-    return points, {"returned_media_id": returned_id or None, "owner_id": owner or None,
-                    "owner_verified": bool(owner), "owner_id_source": owner_source,
-                    "wire_media_field": media_key, "wire_value_fields": sorted(value_fields),
+    if not available:
+        warnings.append("В кривой нет числовых пар index/value; остальные метрики сохранены.")
+    return points, {**metadata, "retention_status": "available" if available else "unavailable",
+                    "retention_unavailable_reason": None if available else "no_numeric_points",
+                    "wire_value_fields": sorted(value_fields),
                     "warnings": list(dict.fromkeys(warnings))}
 
 def private_write(path: Path, content: str | bytes):

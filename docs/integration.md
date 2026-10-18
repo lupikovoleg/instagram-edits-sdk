@@ -5,84 +5,76 @@
 ```python
 from edits_api import EditsClient
 
-def collect_retention(client: EditsClient, reel_url: str):
-    result = client.reel_insights(reel_url)
+def collect(client: EditsClient, reel_url: str):
+    reel = client.reel_insights(reel_url)
     return {
-        "media_id": result.media_id,
-        "collected_at": result.response.fetched_at,
-        "retention": [
-            {"index": p.index, "value": p.value}
-            for p in result.retention
-        ],
-        "warnings": result.metadata["warnings"],
-        "owner_verified": result.metadata["owner_verified"],
+        "media_id": reel.media_id,
+        "collected_at": reel.response.fetched_at,
+        "metrics": reel.metrics,
+        "retention_available": reel.retention_available,
+        "retention": [{"index": p.index, "value": p.value} for p in reel.retention]
+                     if reel.retention_available else None,
+        "warnings": reel.metadata["warnings"],
+        "owner_verified": reel.metadata["owner_verified"],
     }
 ```
 
-Храните каждый snapshot отдельно либо обновляйте по `(account_id, media_id)`
-с timestamp. Статистика меняется со временем. Рекомендованного сервером TTL в этом
-исследовании нет. Кэш 120 секунд найден только во внутреннем репозитории Android-
-клиента; он не является rate limit или обещанием свежести API.
+Сохраняйте snapshots с timestamp. Отсутствие удержания — допустимый результат,
+отказ HTTP или GraphQL — ошибка. Для графика не заменяйте `None` нулями.
+Кэш 120 секунд найден в Android-клиенте; это не серверный rate limit и не обещание свежести.
 
-## Список Reels и пагинация — статически восстановлено
+## Пагинация
 
 ```python
-page = client.account_reels(
-    first=10, after=None, timeframe="ONE_MONTH",
-    order_by="BY_VIEWS", sort_direction="DESCENDING",
-)
-raw_page = page.payload
+client = EditsClient.from_env()
+page = client.reels_page(first=3, timeframe="LIFETIME", order_by="BY_DATE")
+items = list(page.items)
+if page.has_next_page:
+    next_page = client.reels_page(first=3, after=page.next_cursor,
+                                  timeframe="LIFETIME", order_by="BY_DATE")
+    items.extend(next_page.items)
 ```
 
-Восстановлены переменные запроса, но точный wire-путь списка/cursor живым ответом
-не подтверждён. SDK возвращает raw page и **не выдумывает** `.items`/`.next_cursor`.
-Сначала проверьте свою страницу ответа, затем передавайте фактически полученный
-cursor в `after`. Автоматической загрузки всех страниц нет.
+Каждый вызов делает один запрос. SDK не загружает все страницы автоматически.
+Проверены две последовательные страницы по три ролика: cursor принят, пересечений
+ID не было. При переходе сохраняйте фильтры и сортировку. Предел размера страницы
+не установлен. Не используйте ID последнего ролика вместо фактического `end_cursor`.
 
-## Пакетное обновление — статически восстановлено
+## Аккаунт и аудитория
+
+```python
+account = client.account_insights(period="LAST_30_DAYS", include_time_series=True)
+metrics = account.get_data("xig_user_by_igid_v2", "basel_insights")
+audience = client.audience_insights(period="LAST_30_DAYS", client_timezone="Europe/Moscow")
+demographics = audience.get_data("xig_user_by_igid_v2", "basel_insights")
+```
+
+Периоды из APK: `LAST_7_DAYS`, `LAST_14_DAYS`, `LAST_30_DAYS`, `LAST_60_DAYS`,
+`LAST_90_DAYS`, `LAST_180_DAYS`. Живым запросом проверен `LAST_30_DAYS`.
+Наличие аудитории зависит от аккаунта. [Состав данных](data-reference.md).
+
+## Пакетное обновление
 
 ```python
 response = client.reels_delta(["NUMERIC_MEDIA_ID_1", "NUMERIC_MEDIA_ID_2"])
-raw = response.payload
+items = response.get_data("xig_basel_multi_media_insights_query")
 ```
 
-Неизвестные серверные пределы пакета не подменяются числом из предположения.
-Для начала используйте небольшой явно выбранный список и проверяйте ответ.
+Серверный размер пакета неизвестен. Живой проверкой подтверждён один ID;
+многозначный payload поддержан по контракту APK, но отдельно не проверялся.
 
-## Аналитика аккаунта, аудитории и комментариев
+## Ошибки и фоновые задачи
 
-```python
-account = client.account_insights(period=known_period, include_time_series=True)
-audience = client.audience_insights(period=known_period, client_timezone="Europe/Moscow")
-comments = client.comment_insights(reel_url, sort_order=known_sort_order)
-```
+Клиент синхронный: в async-приложении выполняйте вызов в worker/thread. У каждого
+аккаунта своя сессия. Не отправляйте сессию в браузерный frontend. SDK не пишет
+HTTP-заголовки в логи, однако ваше middleware тоже должно скрывать секреты.
 
-`known_period` и `known_sort_order` должны происходить из подтверждённого вами
-контракта текущего клиента. Их допустимые enum здесь не восстановлены. Примеры
-показывают API библиотеки, а не обещают, что произвольная строка будет принята сервером.
+Нет автоматических retries. На HTTP 429, истёкшую сессию или challenge остановите
+задания аккаунта и разберите причину. При собственных повторах временных сетевых
+ошибок ограничивайте число попыток. Таймаут по умолчанию 30 секунд.
 
-## Ошибки, лимиты и фоновые задачи
+## Другие операции
 
-Библиотека синхронная. В async web-приложении выполняйте вызов в worker/thread,
-не блокируя event loop. Timeout задаётся конструктором. Для каждого аккаунта
-используйте его собственную сессию; не помещайте несколько сессий в глобальный
-одиночный клиент.
-
-Автоматических retries нет. HTTP 429 или challenge — сигнал остановить задания
-аккаунта и разбирать причину, а не менять host, IP или sessionid в цикле.
-Если добавляете повтор чтения после временной сетевой ошибки, ограничивайте
-число попыток и учитывайте возможные дубликаты snapshots.
-
-## Изменяющие операции
-
-По умолчанию `execute()` принимает только записи каталога с типом `query`.
-Для найденной mutation нужен **явный флаг на конкретном вызове**:
-
-```python
-# Пример интерфейса, НЕ часть автоматического сбора статистики.
-# Параметры mutation требуется предварительно проверить.
-response = client.execute(operation_name, validated_input, allow_mutation=True)
-```
-
-В текущем проекте ни одна mutation не запускалась на реальном аккаунте.
-Не используйте их как часть health-check, примеров, CI или автоматической диагностики.
+`execute(name, variables)` принимает описанную в реестре операцию схемы `instagram`.
+Изменяющие вызовы требуют `allow_mutation=True`; ни одна mutation в этом проекте
+на сервере не запускалась. Они не входят в health-check или примеры сбора статистики.

@@ -71,6 +71,8 @@ SDK распознаёт оба варианта и отклоняет неод�
 
 `response.payload` остаётся исходным. Для прикладного кода используйте
 `client.reel_insights()` — он преобразует только подтверждённые поля.
+Для других методов `response.get_data("xig_user_by_igid_v2", "basel_insights")`
+разрешает canonical-имена пути; неоднозначные пути отклоняются.
 
 ## Завершение чтения
 
@@ -85,7 +87,8 @@ multipart/mixed и SSE отдельно не реализованы.
 - HTTP не 200 → исключение, без автоматического повтора.
 - GraphQL `errors` или `status=fail` → исключение, даже при HTTP 200.
 - Незавершённый `hasNext=true` → исключение.
-- Нет массива удержания или он пуст → исключение в `reel_insights()`.
+- Удержание отсутствует/null/пусто → остальные метрики доступны в `reel_insights()`,
+  `retention_available=False`; строгий `retention()` выдаёт исключение.
 - Другой media ID/владелец → исключение.
 - Точки с `null` сохраняются как пропуски, не как нули.
 
@@ -95,3 +98,10 @@ Timeout: 30 секунд по умолчанию, разрешён диапаз�
 
 Источники: APK 448.0.0.53.84 и
 [private_graphql_www_request в instagrapi](https://github.com/subzeroid/instagrapi/blob/master/instagrapi/mixins/graphql.py).
+
+## OpenAPI
+
+[Спецификация](openapi.json) описывает этот же POST и девять примеров формы.
+[Swagger UI](swagger.md) служит локальным справочником, отправка запросов из UI отключена.
+`ReelInsightsQuery` реально вернул NDJSON с Content-Type `text/html; charset=utf-8`;
+тип MIME не заменяет проверку и сборку JSON-ответа.

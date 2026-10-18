@@ -16,4 +16,6 @@ jobs:
       - run: python -m pip install .
       - run: python -m unittest discover -s tests -v
       - run: python examples/offline_demo.py
+      - run: python tools/generate_docs.py --check
+      - run: python tools/generate_openapi.py --check
       - run: python tools/check_release.py

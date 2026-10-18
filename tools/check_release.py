@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Check publishable sources and docs, not private browser/session data."""
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -13,8 +14,16 @@ def main():
     operations = json.loads((ROOT / "src/edits_api/operations.json").read_text())
     if len(operations) != 1663 or sum(o["edits_related"] for o in operations) != 88:
         errors.append("Catalog cardinality changed without updating provenance")
-    if [o["operation_name"] for o in operations if o["evidence_level"] == "live-verified"] != ["BaselReelDetailsQuery"]:
-        errors.append("Unexpected live verification claims")
+    evidence = json.loads((ROOT / "docs/evidence/method-verification.json").read_text())
+    verified = {r["operation"] for r in evidence["requests"] if r["http_status"] == 200}
+    if {o["operation_name"] for o in operations if o["evidence_level"] == "live-verified"} != verified:
+        errors.append("Live verification claims differ from recorded evidence")
+    vendor = ROOT / "docs/swagger/vendor"
+    provenance = json.loads((vendor / "provenance.json").read_text())
+    for name in ("swagger-ui-bundle.js", "swagger-ui.css", "LICENSE", "swagger-ui-bundle.js.LICENSE.txt"):
+        path = vendor / name
+        if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != provenance.get("sha256", {}).get(name):
+            errors.append(f"Missing or modified Swagger distribution file: {name}")
     for path in ROOT.rglob("*"):
         rel = path.relative_to(ROOT)
         if not path.is_file() or any(p in EXCLUDED or p.startswith(".venv") or p.endswith(".egg-info") for p in rel.parts):
@@ -27,7 +36,7 @@ def main():
         except UnicodeError:
             errors.append(f"Unexpected binary: {rel}")
             continue
-        forbidden = ["/Users/" + "oleglupikov", "lupikov" + "oleg", "399546659388" + "0963822"]
+        forbidden = ["/Users/" + "oleglupikov", "lupikov" + "oleg", "399546659388" + "0963822", "2303" + "9664", "Ddyv7" + "LANvru"]
         if any(value in text for value in forbidden):
             errors.append(f"Private/local identifier in {rel}")
         if re.search(r"Bearer IGT:2:[A-Za-z0-9+/=]{32,}", text):

@@ -54,8 +54,8 @@ skip_fraction = skip.get("value") if isinstance(skip, dict) else None
 reel.export("results/reel-123")
 ```
 
-Создаются `insights.json`, `retention.csv`, `retention.svg`, `response.json` и
-`manifest.json`. На POSIX файлы создаются с правами 0600, новый каталог — 0700;
+Всегда создаются `insights.json`, `response.json` и `manifest.json`. Если удержание
+доступно, дополнительно создаются `retention.csv` и `retention.svg`. На POSIX файлы создаются с правами 0600, новый каталог — 0700;
 на Windows эти биты не заменяют ACL. Существующий каталог не перезаписывается.
 
 `response.json` может содержать другие приватные метрики и URL медиа; по умолчанию
@@ -67,5 +67,17 @@ reel.export("results/reel-123")
 
 `skip_rate` — отдельная метрика, не весь график. `ReelInsightsQuery` — другая ветка
 общего Instagram-кода, с `retention_curve`, `timestamp_seconds` и `percentage`.
-Её шкала и доступность живым ответом здесь не проверены. Не переносите на неё
-множитель 100 автоматически.
+В живой проверке её `1fpercentage` у кривой — доля (1 = 100%). У других полей
+с именем `percentage`, например у стран, единицы отличаются. Не применяйте
+общий множитель ко всему ответу. [Отдельный пример](../examples/extended_insights.py).
+
+## Когда графика нет
+
+`reel_insights()` сохраняет метрики, если `reels_retentions` отсутствует, равен
+`null`, пуст или содержит только `null`-точки. `retention_available=False`, а
+`metadata.retention_unavailable_reason` объясняет причину. Полностью `null`-точки
+сохраняются в JSON, но график не строится. Строгий `retention()` выдаёт `EditsError`.
+
+Эти варианты проверены синтетически. В живом ответе выбранного Reel удержание
+было доступно. Повреждённая структура массива и отсутствие блока всей статистики
+по-прежнему считаются ошибкой.

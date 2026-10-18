@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "instagram-edits-research"
-version = "0.1.0"
+version = "0.2.0"
 description = "Unofficial, evidence-based Instagram Edits API research client"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -5,16 +5,18 @@
 - **client_doc_id:** `279077652713939115792325780352`
 - **schema:** `instagram`
 - **kind:** `query`
-- **evidence:** `static-contract`
+- **evidence:** `live-verified`
 
-**На сервере не проверено.** Параметры восстановлены из APK; ниже нет гарантии актуальной доступности этому аккаунту.
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** Account aggregates and time series returned; LAST_30_DAYS
 
 ## Variables
 
 | Поле | Восстановленный контракт |
 |---|---|
 | `user_id` | string: userId текущей UserSession |
-| `period` | string, диапазон допустимых значений в этой работе не подтверждён |
+| `period` | LAST_7_DAYS \| LAST_14_DAYS \| LAST_30_DAYS \| LAST_60_DAYS \| LAST_90_DAYS \| LAST_180_DAYS; live tested LAST_30_DAYS |
 | `shouldIncludeTimeSeries` | boolean |
 
 ## Ответ
@@ -36,3 +38,5 @@ payload = response.payload
 Пути ниже относятся к исходному исследовательскому набору. Декомпилированные исходники в этот репозиторий не включены.
 
 - `decompiled/sources/com/instagram/basel/insight/data/remote/BaselAccountLevelInsightsRemoteSource.java:494`
+- `decompiled/sources/X/EnumC38315FHu.java`
+- `decompiled/sources/X/C73666Usk.java:1844`

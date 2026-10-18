@@ -5,20 +5,22 @@
 - **client_doc_id:** `29719058955793752815580108112`
 - **schema:** `instagram`
 - **kind:** `query`
-- **evidence:** `static-contract`
+- **evidence:** `live-verified`
 
-**На сервере не проверено.** Параметры восстановлены из APK; ниже нет гарантии актуальной доступности этому аккаунту.
+Проверено запросом SDK 18 октября 2026 на одном аккаунте. [Область проверки](../verification.md).
+
+**Наблюдение:** Request accepted; ai_comment_insights was null; populated analysis not verified
 
 ## Variables
 
 | Поле | Восстановленный контракт |
 |---|---|
 | `media_id` | string |
-| `sort_order` | string: допустимые значения требуют проверки enum вызывающей стороны |
+| `sort_order` | recent \| popular; live tested recent |
 
 ## Ответ
 
-xig_fetch_media и блок аналитики комментариев
+xig_fetch_media.ai_comment_insights; null in the live test, not an empty comment list
 
 ## Вызов из вашей системы
 
@@ -35,3 +37,4 @@ payload = response.payload
 Пути ниже относятся к исходному исследовательскому набору. Декомпилированные исходники в этот репозиторий не включены.
 
 - `bytecode/sources/com/instagram/basel/insight/data/remote/BaselCommentInsightsRemoteDataSource.java:339`
+- `decompiled/sources/X/EnumC68193RRy.java`

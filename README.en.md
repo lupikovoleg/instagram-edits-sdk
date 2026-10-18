@@ -6,13 +6,13 @@ dependencies. This is not an official Meta SDK or a hosted service.
 
 ## Install and use
 
-The PyPI release is prepared for installation with:
+Install from [PyPI](https://pypi.org/project/instagram-edits-sdk/):
 
 ```sh
 python -m pip install instagram-edits-sdk
 ```
 
-Until the first upload completes, install from source:
+Or install from source:
 
 ```sh
 git clone https://github.com/lupikovoleg/instagram-edits-sdk.git

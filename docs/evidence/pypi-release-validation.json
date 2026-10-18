@@ -9,8 +9,31 @@
   "twine_strict_passed": true,
   "sdist_and_wheel_built": true,
   "python_310_syntax_checked": true,
-  "pypi_upload_completed": false,
-  "public_index_install_verified": false,
-  "reason_pending": "PyPI account and publishing authorization not configured yet",
-  "network_requests_to_instagram": 0
+  "pypi_upload_completed": true,
+  "public_index_install_verified": true,
+  "network_requests_to_instagram": 0,
+  "published_verification_at_utc": "2026-10-18T18:40:14.086614+00:00",
+  "project_url": "https://pypi.org/project/instagram-edits-sdk/",
+  "release_commit": "136293cb41c70ff23694ac3adb27a148b67bcb95",
+  "release_tag": "v0.2.1",
+  "publish_workflow_url": "https://github.com/lupikovoleg/instagram-edits-sdk/actions/runs/39155053642",
+  "public_pypi_wheel_tests_passed": 45,
+  "public_pypi_wheel_sha256_verified": true,
+  "cli_catalog_entries": 88,
+  "published_files": [
+    {
+      "filename": "instagram_edits_sdk-0.2.1-py3-none-any.whl",
+      "sha256": "17b4d8c2d16d972881a6702c1af63131e8cc40f6903e267751c70f0cb912edfa",
+      "url": "https://files.pythonhosted.org/packages/aa/ba/b49cfaa0cb550892047f895e403f0451b123cb45fca34d18b66c4918f370/instagram_edits_sdk-0.2.1-py3-none-any.whl",
+      "size": 105285,
+      "upload_time": "2026-10-18T18:38:56.811445Z"
+    },
+    {
+      "filename": "instagram_edits_sdk-0.2.1.tar.gz",
+      "sha256": "1eb6c38abfcecac09f521926afb7702574359a909e2c7cbd68dc73626fef3805",
+      "url": "https://files.pythonhosted.org/packages/8d/8f/4417f3234ccacfc15f51235aed9041df09cdb7cdd1bdc246235e7c32d9ff/instagram_edits_sdk-0.2.1.tar.gz",
+      "size": 616558,
+      "upload_time": "2026-10-18T18:38:58.435057Z"
+    }
+  ]
 }

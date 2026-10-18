@@ -27,4 +27,4 @@ The repository, package distribution, and Python import have different names:
 | Python import | `edits_api` |
 | CLI | `edits-api` |
 
-The GitHub repository contains the SDK source, examples and documentation. Installation instructions are in README.md. The first PyPI release is being prepared. No hosted API is provided.
+The GitHub repository contains the SDK source, examples and documentation. Installation instructions are in README.md. Published on PyPI as `instagram-edits-sdk`, starting with version 0.2.1. No hosted API is provided.

@@ -16,13 +16,13 @@ Meta и не гарантия доступности данных у любог�
 
 ## Установка
 
-Для релиза в PyPI подготовлена команда:
+Установка из [PyPI](https://pypi.org/project/instagram-edits-sdk/):
 
 ```sh
 python -m pip install instagram-edits-sdk
 ```
 
-До завершения первой публикации можно установить из исходников:
+Установка из исходников:
 
 ```sh
 git clone https://github.com/lupikovoleg/instagram-edits-sdk.git

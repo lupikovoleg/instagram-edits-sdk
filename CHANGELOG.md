@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 — 2026-10-18
+
+- Point PyPI Homepage and Documentation links to the published GitHub Pages site.
+- Add direct links to Russian documentation and Swagger, including in the package description.
+- Include the bilingual documentation site sources and font licenses in the source distribution.
+- Credit Oleg Lupikov in the project license. Runtime behavior is unchanged from 0.2.1.
+
 ## 0.2.1 — 2026-10-18
 
 - Rename the distribution to `instagram-edits-sdk` for PyPI; the `edits_api` import and `edits-api` CLI stay unchanged.

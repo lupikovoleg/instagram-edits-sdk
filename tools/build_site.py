@@ -16,6 +16,7 @@ STAGE=ROOT/'.docs-build'
 SITE=ROOT/'site'
 REPO='https://github.com/lupikovoleg/instagram-edits-sdk'
 PUBLIC='https://lupikovoleg.github.io/instagram-edits-sdk/'
+VERSION=re.search(r'__version__ = "([^"]+)"', (ROOT/'src/edits_api/__init__.py').read_text()).group(1)
 
 
 def write(path,content):
@@ -26,7 +27,7 @@ def credit(lang):
     author='Олег Лупиков' if lang=='ru' else 'Oleg Lupikov'
     note='Независимый проект · Не связан с Meta' if lang=='ru' else 'Independent project · Not affiliated with Meta'
     return (f'<span class="author-credit">© 2026 <a href="{REPO}">{author}</a></span>'
-            f'<span class="footer-meta"><a href="{REPO}/blob/main/LICENSE">MIT License</a> · {note} · SDK 0.2.1</span>')
+            f'<span class="footer-meta"><a href="{REPO}/blob/main/LICENSE">MIT License</a> · {note} · SDK {VERSION}</span>')
 
 
 def rewrite_links(text,source):

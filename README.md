@@ -33,7 +33,7 @@ python -m pip install .
 ```
 
 Имя дистрибутива — `instagram-edits-sdk`, импорт — `edits_api`, команда —
-`edits-api`. Версия 0.2.1. При переходе с локального `instagram-edits-research`
+`edits-api`. Версия 0.2.2. При переходе с локального `instagram-edits-research`
 удалите старый дистрибутив: оба используют один Python-модуль `edits_api`.
 
 ```sh

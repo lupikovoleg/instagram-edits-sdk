@@ -9,7 +9,7 @@ python -m pip install instagram-edits-sdk
 ```
 
 Python **3.10+**. Distribution: `instagram-edits-sdk`. Import: `edits_api`.
-CLI: `edits-api`. Current release: **0.2.1**.
+CLI: `edits-api`. Current release: **0.2.2**.
 
 If you previously installed the local `instagram-edits-research` distribution,
 uninstall it first. Both distributions provide the same Python module.

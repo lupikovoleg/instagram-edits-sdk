@@ -27,8 +27,8 @@ Pending publisher не резервирует имя проекта: оно за
 После настройки и проверки исходников создаётся тег, совпадающий с версией пакета:
 
 ```sh
-git tag v0.2.1
-git push origin v0.2.1
+git tag v0.2.2
+git push origin v0.2.2
 ```
 
 Тег запускает [publish.yml](../.github/workflows/publish.yml). Workflow проверяет
@@ -48,8 +48,8 @@ OIDC-разрешение находится только у job публика�
 ```sh
 python -m unittest discover -s tests -v
 python tools/check_release.py
-python -m build --outdir dist/pypi-0.2.1
-python -m twine check --strict dist/pypi-0.2.1/*
+python -m build --outdir dist/pypi-0.2.2
+python -m twine check --strict dist/pypi-0.2.2/*
 ```
 
 Загружайте только файлы выбранной версии, а не все старые артефакты из `dist`.
@@ -60,7 +60,7 @@ python -m twine check --strict dist/pypi-0.2.1/*
 
 ```sh
 python -m venv /tmp/edits-pypi-check
-/tmp/edits-pypi-check/bin/python -m pip install --index-url https://pypi.org/simple instagram-edits-sdk==0.2.1
+/tmp/edits-pypi-check/bin/python -m pip install --index-url https://pypi.org/simple instagram-edits-sdk==0.2.2
 /tmp/edits-pypi-check/bin/python -c 'from edits_api import EditsClient, Session; import importlib.metadata; print(importlib.metadata.version("instagram-edits-sdk"))'
 /tmp/edits-pypi-check/bin/edits-api catalog
 ```

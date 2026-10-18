@@ -22,7 +22,7 @@ cd instagram-edits-sdk
 python -m pip install .
 ```
 
-Distribution: `instagram-edits-sdk` 0.2.1. Import: `edits_api`. CLI: `edits-api`.
+Distribution: `instagram-edits-sdk` 0.2.2. Import: `edits_api`. CLI: `edits-api`.
 If migrating from the earlier local `instagram-edits-research` distribution,
 uninstall it first: both distributions provide the same `edits_api` module.
 Inject your own Instagram owner's session into `IG_SESSIONID` using a secret manager.

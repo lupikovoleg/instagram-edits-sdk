@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Instagram Edits internal API — research reference",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "Unofficial reference, not affiliated with Meta. Nine read operations exercised on one consenting account on 2026-10-18. Comment analysis returned null; Kits was empty. One real POST endpoint with named persisted-query examples. No public REST gateway is provided. Credentials must stay in your backend."
   },
   "servers": [

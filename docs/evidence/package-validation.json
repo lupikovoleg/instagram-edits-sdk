@@ -1,0 +1,15 @@
+{
+  "validated_at_utc": "2026-10-18T13:20:58.827730+00:00",
+  "python_runtime": "3.14.7",
+  "unit_tests": 36,
+  "unit_tests_passed": 36,
+  "clean_wheel_install": true,
+  "clean_wheel_tests_passed": 36,
+  "sdist_includes_docs_examples_and_fixtures": true,
+  "syntax_checked_since": "3.10",
+  "python_310_runtime_executed_locally": false,
+  "github_actions_executed": false,
+  "new_live_requests_during_packaging": 0,
+  "saved_real_response_parser_parity": true,
+  "private_data_in_distribution": false
+}

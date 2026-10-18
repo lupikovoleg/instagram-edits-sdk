@@ -1,0 +1,40 @@
+{
+  "query": "BaselReelDetailsQuery",
+  "client_doc_id": "3261342854360971614358769315",
+  "url": "https://i.instagram.com/graphql_www",
+  "requested_at_utc": "2026-10-18T12:29:00.966537+00:00",
+  "include_creative_tools": false,
+  "http_status": 200,
+  "content_type": "text/javascript; charset=utf-8",
+  "response_sha256": "1d33ebf40f526c7c5bf057772ab3f17099f0a24f2d39bf4fc294fc530669f606",
+  "response_bytes": 19031,
+  "wire_media_field": "1$xig_fetch_media(id:$media_id)",
+  "wire_value_fields": [
+    "1fvalue"
+  ],
+  "point_count": 62,
+  "numeric_point_count": 62,
+  "index_min": 0,
+  "index_max": 61,
+  "scope": "original research client, one authorized owned Reel",
+  "personal_identifiers_removed": true,
+  "raw_response_distributed": false,
+  "packaged_sdk_new_live_request": false,
+  "packaged_parser_matches_recorded_points": true,
+  "original_functions_reused_without_ast_changes": [
+    "RetentionError",
+    "media_id",
+    "compact_json",
+    "session_headers",
+    "make_request",
+    "NoRedirect",
+    "send",
+    "merge_patch",
+    "parse_response",
+    "extract_curve",
+    "private_write",
+    "svg_chart",
+    "fetch_retention"
+  ],
+  "recorded_owner_matched_session": true
+}

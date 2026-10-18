@@ -1,0 +1,19 @@
+{
+  "data": {
+    "1$xig_fetch_media(id:$media_id)": {
+      "id": "12345_999",
+      "basel_media_level_insights": {
+        "play_count": 100,
+        "like_count": 7,
+        "skip_rate": {"type": "Synthetic skip rate", "1fvalue": 0.2, "1fdelta": -0.1},
+        "average_watch_time": {"type": "Synthetic watch time", "1fvalue": 1234},
+        "reels_retentions": [
+          {"index": 0, "1fvalue": 1.0},
+          {"index": 1, "1fvalue": 0.8},
+          {"index": 2, "1fvalue": null},
+          {"index": 3, "1fvalue": 0.0}
+        ]
+      }
+    }
+  }
+}

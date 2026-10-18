@@ -1,0 +1,7 @@
+include README.md README.en.md LICENSE CONTRIBUTING.md SECURITY.md CHANGELOG.md
+recursive-include docs *.md *.json
+recursive-include examples *.py
+recursive-include tests *.py *.json
+recursive-include tools *.py
+recursive-include .github *.yml
+global-exclude __pycache__ *.py[cod]

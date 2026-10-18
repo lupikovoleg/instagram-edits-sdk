@@ -3,19 +3,26 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "instagram-edits-research"
-version = "0.2.0"
+name = "instagram-edits-sdk"
+version = "0.2.1"
 description = "Unofficial, evidence-based Instagram Edits API research client"
-readme = "README.md"
+readme = "PYPI_README.md"
 requires-python = ">=3.10"
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "docs/swagger/vendor/LICENSE", "docs/swagger/vendor/NOTICE", "docs/swagger/vendor/*.LICENSE.txt"]
 dependencies = []
+keywords = ["instagram", "edits", "reels", "analytics", "retention", "sdk"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[project.urls]
+Homepage = "https://github.com/lupikovoleg/instagram-edits-sdk"
+Documentation = "https://github.com/lupikovoleg/instagram-edits-sdk#readme"
+Repository = "https://github.com/lupikovoleg/instagram-edits-sdk"
+Issues = "https://github.com/lupikovoleg/instagram-edits-sdk/issues"
 
 [project.scripts]
 edits-api = "edits_api.cli:main"

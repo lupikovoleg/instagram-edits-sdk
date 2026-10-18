@@ -12,11 +12,17 @@ Meta и не гарантия доступности данных у любог�
 [English](README.en.md) · [Какие данные доступны](docs/data-reference.md)
 · [Методы](docs/methods.md) · [Авторизация](docs/authentication.md)
 · [Интеграция](docs/integration.md) · [HTTP](docs/http-api.md)
-· [Swagger / OpenAPI](docs/swagger.md) · [Проверки](docs/verification.md)
+· [Swagger / OpenAPI](docs/swagger.md) · [Проверки](docs/verification.md) · [Выпуск в PyPI](docs/releasing.md)
 
 ## Установка
 
-Клонируйте репозиторий и установите пакет:
+Для релиза в PyPI подготовлена команда:
+
+```sh
+python -m pip install instagram-edits-sdk
+```
+
+До завершения первой публикации можно установить из исходников:
 
 ```sh
 git clone https://github.com/lupikovoleg/instagram-edits-sdk.git
@@ -24,9 +30,13 @@ cd instagram-edits-sdk
 python -m pip install .
 ```
 
-Имя дистрибутива — `instagram-edits-research`, импорт — `edits_api`, команда —
-`edits-api`. Версия 0.2.0. В PyPI пакет пока не опубликован; `pip install
-instagram-edits-research` из индекса не является проверенным способом установки.
+Имя дистрибутива — `instagram-edits-sdk`, импорт — `edits_api`, команда —
+`edits-api`. Версия 0.2.1. При переходе с локального `instagram-edits-research`
+удалите старый дистрибутив: оба используют один Python-модуль `edits_api`.
+
+```sh
+python -m pip uninstall instagram-edits-research
+```
 
 ## Статистика Reel, даже без удержания
 

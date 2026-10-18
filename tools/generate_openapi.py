@@ -2,9 +2,11 @@
 """Generate the real form-encoded GraphQL transport reference, offline."""
 import argparse
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+VERSION = re.search(r'__version__ = "([^"]+)"', (ROOT/'src/edits_api/__init__.py').read_text()).group(1)
 BLOKS = '8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8'
 VARIABLES = {
     'BaselReelDetailsQuery': {'media_id':'12345','include_creative_tools':False},
@@ -69,7 +71,7 @@ def build():
         ('X-FB-Friendly-Name','BaselReelDetailsQuery','Must match fb_api_req_friendly_name in the form.'),
         ('X-Client-Doc-Id',operations['BaselReelDetailsQuery']['client_doc_id'],'Must match client_doc_id in the form.'),
     ]:parameters.append({'name':name,'in':'header','required':True,'schema':{'type':'string'},'example':example,'description':description})
-    return {'openapi':'3.1.0','info':{'title':'Instagram Edits internal API — research reference','version':'0.2.0','description':'Unofficial reference, not affiliated with Meta. Nine read operations exercised on one consenting account on 2026-10-18. Comment analysis returned null; Kits was empty. One real POST endpoint with named persisted-query examples. No public REST gateway is provided. Credentials must stay in your backend.'},
+    return {'openapi':'3.1.0','info':{'title':'Instagram Edits internal API — research reference','version':VERSION,'description':'Unofficial reference, not affiliated with Meta. Nine read operations exercised on one consenting account on 2026-10-18. Comment analysis returned null; Kits was empty. One real POST endpoint with named persisted-query examples. No public REST gateway is provided. Credentials must stay in your backend.'},
         'servers':[{'url':'https://i.instagram.com','description':'Host used in recorded live checks'}],
         'security':[{'InstagramSession':[]}],
         'paths':{'/graphql_www':{'post':{'operationId':'executePersistedInstagramQuery','summary':'Execute a named persisted read query','description':'Choose a request example. Friendly-name and document-ID headers must match its form fields. variables is a JSON string. For operational calls use the Python SDK: it handles aliases, NDJSON, ownership and response validation. Examples contain synthetic account/media IDs.',

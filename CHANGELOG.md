@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 — 2026-10-18
+
+- Rename the distribution to `instagram-edits-sdk` for PyPI; the `edits_api` import and `edits-api` CLI stay unchanged.
+- Add an English PyPI description, project links and bundled license metadata.
+- Add a tag-triggered build and publish workflow using PyPI Trusted Publishing.
+- Runtime API and observed live-query evidence remain unchanged from 0.2.0.
+
 ## 0.2.0 — 2026-10-18
 
 - Preserve Reel statistics when retention is missing, null, empty, or all-null.

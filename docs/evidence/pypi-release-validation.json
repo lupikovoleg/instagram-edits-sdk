@@ -1,0 +1,16 @@
+{
+  "validated_at_utc": "2026-10-18T18:32:37.059962+00:00",
+  "distribution": "instagram-edits-sdk",
+  "version": "0.2.1",
+  "runtime": "3.14.7",
+  "unit_tests_passed_from_installed_wheel": 45,
+  "install_used_no_dependencies": true,
+  "runtime_dependencies": [],
+  "twine_strict_passed": true,
+  "sdist_and_wheel_built": true,
+  "python_310_syntax_checked": true,
+  "pypi_upload_completed": false,
+  "public_index_install_verified": false,
+  "reason_pending": "PyPI account and publishing authorization not configured yet",
+  "network_requests_to_instagram": 0
+}

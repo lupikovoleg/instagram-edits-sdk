@@ -6,7 +6,13 @@ dependencies. This is not an official Meta SDK or a hosted service.
 
 ## Install and use
 
-Install from a clone or downloaded source directory (not published to PyPI):
+The PyPI release is prepared for installation with:
+
+```sh
+python -m pip install instagram-edits-sdk
+```
+
+Until the first upload completes, install from source:
 
 ```sh
 git clone https://github.com/lupikovoleg/instagram-edits-sdk.git
@@ -14,7 +20,9 @@ cd instagram-edits-sdk
 python -m pip install .
 ```
 
-Distribution: `instagram-edits-research` 0.2.0. Import: `edits_api`. CLI: `edits-api`.
+Distribution: `instagram-edits-sdk` 0.2.1. Import: `edits_api`. CLI: `edits-api`.
+If migrating from the earlier local `instagram-edits-research` distribution,
+uninstall it first: both distributions provide the same `edits_api` module.
 Inject your own Instagram owner's session into `IG_SESSIONID` using a secret manager.
 The library does not log in or read browser cookies.
 

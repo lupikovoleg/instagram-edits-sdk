@@ -12,7 +12,7 @@
 
 **Suggested About website:** leave blank until documentation is hosted.
 
-**Initial release title:** `v0.2.0 — Reel analytics SDK and verified read methods`
+**Initial release title:** `v0.2.1 — Reel analytics SDK and verified read methods`
 
 **Release summary:**
 
@@ -23,8 +23,8 @@ The repository, package distribution, and Python import have different names:
 | Purpose | Name |
 |---|---|
 | GitHub repository | `instagram-edits-sdk` |
-| Python distribution | `instagram-edits-research` |
+| Python distribution | `instagram-edits-sdk` |
 | Python import | `edits_api` |
 | CLI | `edits-api` |
 
-The GitHub repository contains the SDK source, examples and documentation. Installation instructions are in README.md. No PyPI publication or hosted API is provided.
+The GitHub repository contains the SDK source, examples and documentation. Installation instructions are in README.md. The first PyPI release is being prepared. No hosted API is provided.

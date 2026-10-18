@@ -1,0 +1,120 @@
+{
+  "BaselReelDetailsQuery": {
+    "description": "Detailed metrics and numerical retention for an owned Reel.",
+    "variables": {
+      "media_id": "string: internal Reel ID",
+      "include_creative_tools": "boolean: client feature flag"
+    },
+    "returns": "xig_fetch_media.basel_media_level_insights: counts, rate objects, views_over_time and reels_retentions [{index, value}]."
+  },
+  "BaselPublicInsightsQuery": {
+    "description": "A smaller set of Reel counts and engagement rates.",
+    "variables": {
+      "media_id": "string: internal Reel ID"
+    },
+    "returns": "xig_fetch_media.basel_media_public_insights. No retention curve in the observed block."
+  },
+  "BaselAccountLevelInsightsQuery": {
+    "description": "Account aggregates with optional time series.",
+    "variables": {
+      "user_id": "string: current account ID",
+      "period": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS",
+      "shouldIncludeTimeSeries": "boolean"
+    },
+    "returns": "xig_user_by_igid_v2.basel_insights: views, reach, growth and interaction metric objects, with time_series when requested."
+  },
+  "BaselAccountLevelReelsQuery": {
+    "description": "A sorted, cursor-paginated list of Reels and their metrics.",
+    "variables": {
+      "user_id": "string: current account ID",
+      "order_by": "BY_DATE | BY_VIEWS | BY_LIKES | BY_COMMENTS | BY_REPOSTS | BY_SHARES | BY_SAVES | BY_FOLLOWERS | BY_SKIP_RATE",
+      "first": "positive integer; server limit unknown",
+      "after": "string/null: returned cursor",
+      "timeframe": "LIFETIME | ONE_WEEK | TWO_WEEKS | ONE_MONTH | ONE_YEAR",
+      "sort_direction": "ASCENDING | DESCENDING | null",
+      "skip_follow_count": "boolean"
+    },
+    "returns": "xig_user_by_igid_v2.basel_insights.user_reel_dicts: edges[].node and page_info with has_next_page/end_cursor."
+  },
+  "BaselAudienceInsightsQuery": {
+    "description": "Account audience demographics, follower growth and activity.",
+    "variables": {
+      "user_id": "string: current account ID",
+      "period": "LAST_7_DAYS | LAST_14_DAYS | LAST_30_DAYS | LAST_60_DAYS | LAST_90_DAYS | LAST_180_DAYS; live tested LAST_30_DAYS",
+      "client_timezone": "string: time zone, e.g. Europe/Moscow"
+    },
+    "returns": "xig_user_by_igid_v2.basel_insights: age, gender, locations, followers and activity. Availability depends on the account."
+  },
+  "XIGBaselAccountLevelReelsDataDeltaQuery": {
+    "description": "Refresh metric counts for selected Reel IDs.",
+    "variables": {
+      "media_ids": "array<string>; only one ID was live tested"
+    },
+    "returns": "xig_basel_multi_media_insights_query: list of id/basel_media_level_insights objects."
+  },
+  "XIGBaselInsightsCommentsQuery": {
+    "description": "Read the AI comment-insights block for a Reel.",
+    "variables": {
+      "media_id": "string: internal Reel ID",
+      "sort_order": "recent | popular; live tested recent"
+    },
+    "returns": "xig_fetch_media.ai_comment_insights. Null in the live check; populated shape not verified."
+  },
+  "BaselKitsQuery": {
+    "description": "Read reusable Edits kits.",
+    "variables": {
+      "after": "string/null: cursor"
+    },
+    "returns": "xig_basel_kits.kits(after:$after,first:50): edges and page_info. The observed list was empty."
+  },
+  "ReelInsightsQuery": {
+    "description": "An alternative Reel-insights branch in shared Instagram code. Its use by the Edits screen was not established.",
+    "variables": {
+      "mediaIgid": "string: internal Reel ID",
+      "bloksVersioningId": "string; tested APK version: 8dc50e9193c9b70a3f9dbcc25fc5f444bbac27bb56a8c1359ede836b8069c4b8"
+    },
+    "returns": "ig_reel_insights.retention.retention_curve [{timestamp_seconds, 1fpercentage}]. Curve percentage is a fraction (1 = 100%); other percentage fields may use different units. Also contains metrics and demographics."
+  },
+  "BaselKitClearDefaultMutation": {
+    "description": "Remove the default-kit designation.",
+    "variables": {
+      "kit_id": "string"
+    },
+    "returns": "xig_basel_kit_clear_default; static contract, not live tested."
+  },
+  "BaselKitCreateMutation": {
+    "description": "Create an Edits kit. Changes account data.",
+    "variables": {
+      "input": "GraphQlCallInput; nested builder fields are not fully recovered"
+    },
+    "returns": "xig_basel_kit_create; static contract, not live tested."
+  },
+  "BaselKitDeleteMutation": {
+    "description": "Delete an Edits kit.",
+    "variables": {
+      "kit_id": "string"
+    },
+    "returns": "xig_basel_kit_delete; static contract, not live tested."
+  },
+  "BaselKitSetDefaultMutation": {
+    "description": "Set the default kit.",
+    "variables": {
+      "kit_id": "string"
+    },
+    "returns": "xig_basel_kit_set_default; static contract, not live tested."
+  },
+  "BaselKitUpdateMutation": {
+    "description": "Update an Edits kit. Changes account data.",
+    "variables": {
+      "input": "GraphQlCallInput; name and add_members were found, remaining fields need verification"
+    },
+    "returns": "xig_basel_kit_update; static contract, not live tested."
+  },
+  "XIGBaselInsightsRetentionSummaryMutation": {
+    "description": "Generate a text retention summary and hook analysis. This is not the numerical curve.",
+    "variables": {
+      "input": "object with media_id:string"
+    },
+    "returns": "xig_retention_summary: success, summary, start_time, end_time, hook_analysis.summary; or error.error_code/error_message. Not live tested."
+  }
+}

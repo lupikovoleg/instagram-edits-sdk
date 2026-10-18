@@ -1,5 +1,7 @@
 # Instagram Edits SDK
 
+[**Documentation**](https://lupikovoleg.github.io/instagram-edits-sdk/) · [**Русская версия**](https://lupikovoleg.github.io/instagram-edits-sdk/ru/) · [**Swagger**](https://lupikovoleg.github.io/instagram-edits-sdk/swagger-ui/)
+
 Unofficial Python SDK and developer documentation for Instagram Edits analytics,
 Reel insights, audience statistics, and retention curves. Python 3.10+, no runtime
 dependencies. This is not an official Meta SDK or a hosted service.

@@ -20,3 +20,5 @@ dist/
 results/
 private/
 .DS_Store
+.docs-build/
+site/

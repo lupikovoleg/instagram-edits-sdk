@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-EXCLUDED = {".git", ".venv", "build", "dist", "__pycache__", "results"}
+EXCLUDED = {".git", ".venv", "build", "dist", "__pycache__", "results", "site", ".docs-build"}
 
 
 def main():
@@ -24,12 +24,24 @@ def main():
         path = vendor / name
         if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != provenance.get("sha256", {}).get(name):
             errors.append(f"Missing or modified Swagger distribution file: {name}")
+    fonts = ROOT / "website/assets/fonts"
+    font_hashes = {}
+    if (fonts / "provenance.json").exists():
+        font_hashes = {item["file"]: item["sha256"] for item in json.loads((fonts / "provenance.json").read_text())}
+    for name, expected in font_hashes.items():
+        path = fonts / name
+        if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            errors.append(f"Missing or modified font asset: {name}")
     for path in ROOT.rglob("*"):
         rel = path.relative_to(ROOT)
         if not path.is_file() or any(p in EXCLUDED or p.startswith(".venv") or p.endswith(".egg-info") for p in rel.parts):
             continue
         if path.suffix in {".apk", ".dex", ".so", ".har"}:
             errors.append(f"Unpublishable artifact: {rel}")
+            continue
+        if path.suffix == ".ttf" and path.parent == fonts:
+            if hashlib.sha256(path.read_bytes()).hexdigest() != font_hashes.get(path.name):
+                errors.append(f"Unverified font file: {rel}")
             continue
         try:
             text = path.read_text()
@@ -39,6 +51,8 @@ def main():
         # This public project URL is intentional; account identifiers in response data are not.
         public_repository = "https://github.com/" + "lupikov" + "oleg/instagram-edits-sdk"
         text = text.replace(public_repository, "https://github.com/OWNER/instagram-edits-sdk")
+        public_docs = "https://" + "lupikov" + "oleg.github.io/instagram-edits-sdk/"
+        text = text.replace(public_docs, "https://OWNER.github.io/instagram-edits-sdk/")
         if rel == Path("docs/releasing.md"):
             # The Trusted Publisher form requires the public GitHub owner explicitly.
             text = text.replace("`lupikov" + "oleg`", "`PUBLIC_GITHUB_OWNER`")
@@ -47,7 +61,9 @@ def main():
             errors.append(f"Private/local identifier in {rel}")
         if re.search(r"Bearer IGT:2:[A-Za-z0-9+/=]{32,}", text):
             errors.append(f"Possible authorization token in {rel}")
-        if path.suffix == ".md":
+        # Website sources link to generated/copied pages; check_site.py validates
+        # those destinations and anchors after both language builds.
+        if path.suffix == ".md" and rel.parts[0] != "website":
             for target in re.findall(r"\]\(([^)]+)\)", text):
                 if "://" not in target and not target.startswith("#"):
                     local = target.split("#", 1)[0]

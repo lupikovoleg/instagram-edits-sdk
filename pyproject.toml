@@ -9,7 +9,7 @@ description = "Unofficial, evidence-based Instagram Edits API research client"
 readme = "PYPI_README.md"
 requires-python = ">=3.10"
 license = "MIT"
-license-files = ["LICENSE", "docs/swagger/vendor/LICENSE", "docs/swagger/vendor/NOTICE", "docs/swagger/vendor/*.LICENSE.txt"]
+license-files = ["LICENSE", "docs/swagger/vendor/LICENSE", "docs/swagger/vendor/NOTICE", "docs/swagger/vendor/*.LICENSE.txt", "website/assets/fonts/*-OFL.txt"]
 dependencies = []
 keywords = ["instagram", "edits", "reels", "analytics", "retention", "sdk"]
 classifiers = [
@@ -20,7 +20,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/lupikovoleg/instagram-edits-sdk"
-Documentation = "https://github.com/lupikovoleg/instagram-edits-sdk#readme"
+Documentation = "https://lupikovoleg.github.io/instagram-edits-sdk/"
 Repository = "https://github.com/lupikovoleg/instagram-edits-sdk"
 Issues = "https://github.com/lupikovoleg/instagram-edits-sdk/issues"
 

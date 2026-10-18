@@ -9,6 +9,8 @@ dependencies. This is not an official Meta SDK or a hosted service.
 Install from a clone or downloaded source directory (not published to PyPI):
 
 ```sh
+git clone https://github.com/lupikovoleg/instagram-edits-sdk.git
+cd instagram-edits-sdk
 python -m pip install .
 ```
 

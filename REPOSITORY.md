@@ -27,4 +27,4 @@ The repository, package distribution, and Python import have different names:
 | Python import | `edits_api` |
 | CLI | `edits-api` |
 
-Prepared locally only. No GitHub push, release, Pages deployment, or PyPI upload has been performed by this task.
+The GitHub repository contains the SDK source, examples and documentation. Installation instructions are in README.md. No PyPI publication or hosted API is provided.

@@ -10,6 +10,8 @@ def main():
     args = parser.parse_args()
     try:
         result = EditsClient.from_env().reel_insights(args.reel)
+        if not result.retention_available:
+            raise EditsError("Retention is unavailable; use reel_statistics.py for the other metrics.")
         result.export(args.output)
     except EditsError as exc:
         parser.exit(1, f"Error: {exc}\n")

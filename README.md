@@ -16,9 +16,11 @@ Meta и не гарантия доступности данных у любог�
 
 ## Установка
 
-Из корня клонированного или скачанного репозитория:
+Клонируйте репозиторий и установите пакет:
 
 ```sh
+git clone https://github.com/lupikovoleg/instagram-edits-sdk.git
+cd instagram-edits-sdk
 python -m pip install .
 ```
 

@@ -36,6 +36,9 @@ def main():
         except UnicodeError:
             errors.append(f"Unexpected binary: {rel}")
             continue
+        # This public project URL is intentional; account identifiers in response data are not.
+        public_repository = "https://github.com/" + "lupikov" + "oleg/instagram-edits-sdk"
+        text = text.replace(public_repository, "https://github.com/OWNER/instagram-edits-sdk")
         forbidden = ["/Users/" + "oleglupikov", "lupikov" + "oleg", "399546659388" + "0963822", "2303" + "9664", "Ddyv7" + "LANvru"]
         if any(value in text for value in forbidden):
             errors.append(f"Private/local identifier in {rel}")
